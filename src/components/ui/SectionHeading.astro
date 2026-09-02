@@ -1,0 +1,53 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Eyebrow from './Eyebrow.astro';
+
+interface Props extends HTMLAttributes<'div'> {
+  /** Optional small label above the heading. Most sections do not need one. */
+  eyebrow?: string;
+  level?: 'h2' | 'h3';
+  size?: 'h1' | 'h2' | 'h3';
+  align?: 'start' | 'center';
+  tone?: 'ink' | 'light';
+  class?: string;
+}
+
+const {
+  eyebrow,
+  level: Tag = 'h2',
+  size = 'h2',
+  align = 'start',
+  tone = 'ink',
+  class: className,
+  ...rest
+} = Astro.props;
+
+const sizes = { h1: 'text-display', h2: 'text-heading', h3: 'text-heading' } as const;
+const tones = { ink: 'text-ink-deep', light: 'text-white' } as const;
+---
+
+<div
+  class:list={[
+    'flex flex-col gap-4 portrait:gap-3',
+    align === 'center' && 'items-center text-center',
+    className,
+  ]}
+  {...rest}
+>
+  {eyebrow && <Eyebrow tone={tone === 'light' ? 'light' : 'brand'}>{eyebrow}</Eyebrow>}
+  <Tag class:list={[sizes[size], tones[tone], 'max-w-[24ch] portrait:max-w-none']}>
+    <slot />
+  </Tag>
+  {
+    Astro.slots.has('sub') && (
+      <div
+        class:list={[
+          'max-w-[54ch] text-body',
+          tone === 'light' ? 'text-white/70' : 'text-slate',
+        ]}
+      >
+        <slot name="sub" />
+      </div>
+    )
+  }
+</div>

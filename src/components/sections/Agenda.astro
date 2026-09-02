@@ -1,0 +1,58 @@
+---
+import Section from '../layout/Section.astro';
+import Container from '../layout/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Button from '../ui/Button.astro';
+import AgendaTabs from '../islands/AgendaTabs';
+import { days, addOns } from '../../data/agenda';
+import { links } from '../../data/site';
+---
+
+<Section id="agenda" tone="white" spacing="lg">
+  <Container width="wide">
+    <div
+      class="reveal flex items-end justify-between gap-12 landscape:flex-col landscape:items-start landscape:gap-6"
+      data-reveal
+    >
+      <SectionHeading>Two days, mapped hour by hour.</SectionHeading>
+      <p class="max-w-[32ch] shrink-0 text-body leading-relaxed text-slate landscape:max-w-none">
+        Speakers are being locked now — the structure is final.
+      </p>
+    </div>
+
+    <div class="reveal mt-14 landscape:mt-10" data-reveal data-reveal-delay="100">
+      <AgendaTabs days={days} client:visible />
+    </div>
+
+    <!-- Download sits directly under the tables, ungated, opening in a new tab -->
+    <div class="mt-10 flex flex-wrap items-center gap-6 landscape:mt-8">
+      <Button href={links.agendaPdf} variant="outline" size="md" external stack>
+        Download the full agenda (PDF)
+      </Button>
+      <p class="text-body text-slate">No email required.</p>
+    </div>
+
+    <!-- Optional add-ons -->
+    <div class="mt-16 border-t border-line pt-8">
+      <h3 class="label text-slate">Optional add-ons</h3>
+      <ul
+        class="mt-7 grid grid-cols-4 gap-x-8 gap-y-8 tablet:grid-cols-2 portrait:grid-cols-1 portrait:gap-y-6"
+      >
+        {
+          addOns.map((item) => (
+            <li class="flex flex-col gap-1.5">
+              <span class="label text-brand">{item.day}</span>
+              <span class="font-mono text-small text-slate">{item.time}</span>
+              <span class="font-display text-body leading-snug font-black tracking-[-0.01em] text-ink-deep">
+                {item.title}
+              </span>
+              {item.note && (
+                <span class="mt-0.5 text-small text-slate italic">{item.note}</span>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Container>
+</Section>

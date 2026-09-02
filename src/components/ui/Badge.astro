@@ -1,0 +1,28 @@
+---
+/**
+ * Small tag. `gold` is reserved for "something is different here" — a saving,
+ * a TBD, a note awaiting sign-off. Everything else stays neutral.
+ */
+interface Props {
+  tone?: 'neutral' | 'gold' | 'brand' | 'light';
+  class?: string;
+}
+const { tone = 'neutral', class: className } = Astro.props;
+
+const tones = {
+  neutral: 'bg-gray-100 text-ink',
+  gold: 'bg-gold text-gray-900',
+  brand: 'bg-brand text-white',
+  light: 'bg-white/10 text-white ring-1 ring-inset ring-white/15',
+} as const;
+---
+
+<span
+  class:list={[
+    'inline-flex w-fit self-start items-center rounded-[2px] px-2.5 py-1 label whitespace-nowrap',
+    tones[tone],
+    className,
+  ]}
+>
+  <slot />
+</span>

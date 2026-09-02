@@ -1,0 +1,13 @@
+---
+/** A plain hairline. Used rarely — whitespace does most of the separating. */
+interface Props {
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+const { tone = 'light', class: className } = Astro.props;
+---
+<div
+  class:list={['h-px w-full', tone === 'light' ? 'bg-line' : 'bg-line-dark', className]}
+  aria-hidden="true"
+>
+</div>

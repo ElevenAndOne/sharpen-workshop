@@ -1,0 +1,28 @@
+---
+/**
+ * Chef Deb lockup.
+ *
+ * The only asset available is a white-on-transparent PNG, so it is used as a
+ * CSS mask and painted with `currentColor`. That gives us the mark in white,
+ * brand red or ink from one file with no extra exports.
+ */
+interface Props {
+  /** Rendered height in px; width follows the asset's aspect ratio. */
+  height?: number;
+  class?: string;
+  label?: string;
+}
+const { height = 52, class: className, label = 'Chef Deb Coaching' } = Astro.props;
+const src = '/brand/chefdeb-logo-white.png';
+---
+
+<span
+  class:list={['inline-block shrink-0 bg-current', className]}
+  style={`height:${height}px; aspect-ratio: 1528 / 1020;
+    -webkit-mask-image:url(${src}); mask-image:url(${src});
+    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+    -webkit-mask-position:center; mask-position:center;
+    -webkit-mask-size:contain; mask-size:contain;`}
+  role="img"
+  aria-label={label}
+></span>

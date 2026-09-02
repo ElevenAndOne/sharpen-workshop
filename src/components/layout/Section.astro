@@ -1,0 +1,80 @@
+---
+/**
+ * Section — the holding element.
+ *
+ * Owns: semantics (<section>/<header>/<footer>), the anchor id, the surface
+ * tone, vertical rhythm and `position: relative` so anything absolutely
+ * positioned can be anchored to it.
+ *
+ * Owns nothing horizontal. No max-width, no gutters, no auto margins — that
+ * is Container's job.
+ *
+ * Background / floating elements live BETWEEN <Section> and <Container>:
+ *
+ *   <Section tone="dark" spacing="lg" clip>
+ *     <ImageFrame fill src="…" alt="" />   <!-- full-bleed photo behind -->
+ *     <Container>...</Container>
+ *   </Section>
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+/* Neutral-first surfaces. Red and gold are accents, never section grounds. */
+export type SectionTone = 'white' | 'gray' | 'gray-deep' | 'dark' | 'none';
+
+export type SectionSpacing = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
+interface Props extends HTMLAttributes<'section'> {
+  as?: 'section' | 'div' | 'header' | 'footer' | 'aside' | 'article';
+  tone?: SectionTone;
+  spacing?: SectionSpacing;
+  /** Clip decorative overflow to the section box. */
+  clip?: boolean;
+  /** Stack above neighbouring sections (for overlapping cards). */
+  raise?: boolean;
+  class?: string;
+}
+
+const {
+  as: Tag = 'section',
+  tone = 'none',
+  spacing = 'lg',
+  clip = false,
+  raise = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+/* Surface tones. Each sets its own ground + a sane default text colour so
+   nested copy never inherits the wrong contrast. */
+const tones: Record<SectionTone, string> = {
+  white: 'bg-white text-ink',
+  gray: 'bg-gray-50 text-ink',
+  'gray-deep': 'bg-gray-100 text-ink',
+  dark: 'bg-gray-900 text-white',
+  none: '',
+};
+
+/* Vertical rhythm, desktop first, stepping down through the four tiers. */
+const spacings: Record<SectionSpacing, string> = {
+  none: '',
+  xs: 'py-8 tablet:py-7 landscape:py-6 portrait:py-6 [--section-py:2rem] tablet:[--section-py:1.75rem]',
+  sm: 'py-14 tablet:py-12 landscape:py-10 portrait:py-10 [--section-py:3.5rem] tablet:[--section-py:3rem]',
+  md: 'py-20 tablet:py-18 landscape:py-14 portrait:py-12 [--section-py:5rem] tablet:[--section-py:4.5rem]',
+  lg: 'py-28 tablet:py-24 landscape:py-18 portrait:py-14 [--section-py:7rem] tablet:[--section-py:6rem]',
+  xl: 'py-36 tablet:py-28 landscape:py-20 portrait:py-16 [--section-py:9rem] tablet:[--section-py:7rem]',
+};
+---
+
+<Tag
+  class:list={[
+    'relative',
+    tones[tone],
+    spacings[spacing],
+    clip && 'overflow-hidden',
+    raise && 'z-10',
+    className,
+  ]}
+  {...rest}
+>
+  <slot />
+</Tag>

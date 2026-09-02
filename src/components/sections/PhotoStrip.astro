@@ -1,0 +1,35 @@
+---
+/**
+ * Inside the room — three photographs, equal frames, edge to edge, no copy.
+ * The imagery is the argument.
+ */
+import Section from '../layout/Section.astro';
+import ImageFrame from '../ui/ImageFrame.astro';
+import flipchart from '../../assets/images/deb-flipchart.jpg';
+import worksheet from '../../assets/images/worksheet-closeup.jpg';
+import table from '../../assets/images/deb-coaching-table.jpg';
+
+const frames = [
+  { image: flipchart, alt: 'Chef Deb standing at a flip chart in front of a room of owners.', position: '58% 40%' },
+  { image: worksheet, alt: 'An owner filling in a SHARPEN worksheet by hand, laptop open beside her.', position: '50% 50%' },
+  { image: table, alt: 'Chef Deb and an owner laughing over notes and coffee at a small table.', position: '40% 50%' },
+];
+---
+
+<Section tone="white" spacing="none" clip>
+  <div class="grid grid-cols-3 gap-1 portrait:grid-cols-1">
+    {
+      frames.map((f, i) => (
+        <div class="reveal-clip relative aspect-[4/5] portrait:aspect-[4/3]" data-reveal style={`--i:${i}`}>
+          <ImageFrame
+            fill
+            image={f.image}
+            alt={f.alt}
+            sizes="(width <= 767px) 100vw, 34vw"
+            position={f.position}
+          />
+        </div>
+      ))
+    }
+  </div>
+</Section>

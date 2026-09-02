@@ -1,0 +1,76 @@
+---
+/**
+ * Container — the measuring element.
+ *
+ * Owns: max-width, `margin-inline: auto`, and the horizontal gutters.
+ * Always sits inside a <Section>. Owns no background and no vertical padding.
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+export type ContainerWidth = 'narrow' | 'content' | 'site' | 'wide' | 'full';
+export type ContainerGutter = 'none' | 'tight' | 'default' | 'roomy';
+
+interface Props extends HTMLAttributes<'div'> {
+  as?: 'div' | 'section' | 'nav' | 'ul' | 'header' | 'footer';
+  width?: ContainerWidth;
+  gutter?: ContainerGutter;
+  /** Keep it above sibling background layers. */
+  raise?: boolean;
+  /** Thin vertical hairlines on the container's outer edges, running the
+      full height of the section — a chefdeb.com detail. Desktop/tablet only. */
+  edges?: boolean;
+  class?: string;
+}
+
+const {
+  as: Tag = 'div',
+  width = 'site',
+  gutter = 'default',
+  raise = true,
+  edges = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const widths: Record<ContainerWidth, string> = {
+  narrow: 'max-w-narrow',
+  content: 'max-w-content',
+  site: 'max-w-site',
+  wide: 'max-w-wide',
+  full: 'max-w-none',
+};
+
+const gutters: Record<ContainerGutter, string> = {
+  none: '',
+  tight: 'px-6 tablet:px-5 landscape:px-4 portrait:px-4',
+  default: 'px-10 tablet:px-8 landscape:px-6 portrait:px-5',
+  roomy: 'px-16 tablet:px-12 landscape:px-8 portrait:px-5',
+};
+---
+
+<Tag
+  class:list={[
+    'mx-auto w-full',
+    widths[width],
+    gutters[gutter],
+    (raise || edges) && 'relative z-1',
+    className,
+  ]}
+  {...rest}
+>
+  {
+    edges && (
+      <>
+        <span
+          class="pointer-events-none absolute top-[calc(-1*var(--section-py,0px))] bottom-[calc(-1*var(--section-py,0px))] left-0 w-px bg-line landscape:hidden"
+          aria-hidden="true"
+        />
+        <span
+          class="pointer-events-none absolute top-[calc(-1*var(--section-py,0px))] bottom-[calc(-1*var(--section-py,0px))] right-0 w-px bg-line landscape:hidden"
+          aria-hidden="true"
+        />
+      </>
+    )
+  }
+  <slot />
+</Tag>

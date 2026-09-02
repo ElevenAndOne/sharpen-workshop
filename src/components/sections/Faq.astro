@@ -1,0 +1,47 @@
+---
+import Section from '../layout/Section.astro';
+import Container from '../layout/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import FaqAccordion from '../islands/FaqAccordion';
+import { faqs } from '../../data/faq';
+import { contacts } from '../../data/site';
+---
+
+<Section id="faq" tone="gray" spacing="lg">
+  <Container width="wide" edges>
+    <div
+      class="grid grid-cols-[0.7fr_1.3fr] items-start gap-20 tablet:gap-12 landscape:grid-cols-1 landscape:gap-10"
+    >
+      <div class="reveal flex flex-col gap-6" data-reveal>
+        <SectionHeading>Questions</SectionHeading>
+
+        <div class="mt-8 flex flex-col gap-5 border-t border-line pt-6">
+          <p class="label text-slate">Still stuck?</p>
+          {
+            contacts.map((c) => (
+              <div class="flex flex-col gap-1">
+                <span class="font-display text-body font-black text-ink-deep">{c.name}</span>
+                <a
+                  href={`mailto:${c.email}`}
+                  class="w-fit text-body text-brand underline decoration-2 underline-offset-4 hover:decoration-brand-deep"
+                >
+                  {c.email}
+                </a>
+                <a
+                  href={c.phoneHref}
+                  class="w-fit font-mono text-body text-slate hover:text-ink"
+                >
+                  {c.phone}
+                </a>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="reveal" data-reveal data-reveal-delay="120">
+        <FaqAccordion items={faqs} client:visible />
+      </div>
+    </div>
+  </Container>
+</Section>

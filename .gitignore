@@ -1,0 +1,11 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# local tooling
+.playwright-mcp/
+.impeccable/
+.DS_Store

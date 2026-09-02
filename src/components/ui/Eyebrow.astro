@@ -1,0 +1,18 @@
+---
+/** Small tracked label. Used sparingly — most headings stand on their own. */
+interface Props {
+  tone?: 'brand' | 'slate' | 'light';
+  class?: string;
+}
+const { tone = 'slate', class: className } = Astro.props;
+
+const tones = {
+  brand: 'text-brand',
+  slate: 'text-slate',
+  light: 'text-white/60',
+} as const;
+---
+
+<p class:list={['label', tones[tone], className]}>
+  <slot />
+</p>

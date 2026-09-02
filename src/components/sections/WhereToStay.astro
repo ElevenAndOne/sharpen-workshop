@@ -1,0 +1,48 @@
+---
+import Section from '../layout/Section.astro';
+import Container from '../layout/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import { stayIntro, stayAreas } from '../../data/stay';
+---
+
+<Section id="stay" tone="white" spacing="lg">
+  <Container width="wide">
+    <div
+      class="grid grid-cols-[0.7fr_1.3fr] items-start gap-20 tablet:gap-12 landscape:grid-cols-1 landscape:gap-10"
+    >
+      <div class="reveal flex flex-col gap-6" data-reveal>
+        <SectionHeading>Where to stay</SectionHeading>
+        <p class="max-w-[42ch] text-body text-slate">{stayIntro}</p>
+      </div>
+
+      <div class="reveal grid grid-cols-2 gap-6 portrait:grid-cols-1" data-reveal data-reveal-delay="120">
+        {
+          stayAreas.map((area) => (
+            <div class="flex flex-col gap-6 bg-gray-50 p-7 portrait:p-6">
+              <div class="flex flex-col gap-2">
+                <h3 class="text-body font-black text-ink-deep">{area.area}</h3>
+                <p class="text-body text-slate">{area.blurb}</p>
+              </div>
+              <ul class="flex flex-col">
+                {area.hotels.map((h) => (
+                  <li class="flex items-baseline justify-between gap-6 border-t border-line py-4 last:pb-0">
+                    <a
+                      href={h.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-body text-ink underline decoration-line underline-offset-4 transition-colors duration-200 hover:text-brand hover:decoration-brand"
+                    >
+                      {h.name}
+                      <span class="sr-only"> (opens in a new tab)</span>
+                    </a>
+                    <span class="label shrink-0 text-slate">{h.rate ?? 'Check rates'}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </Container>
+</Section>

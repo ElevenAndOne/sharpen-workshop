@@ -1,0 +1,85 @@
+---
+/**
+ * Photograph slot.
+ *
+ * Pass `image` (an imported asset) and it renders a responsive <picture>
+ * with AVIF/WebP sources sized for the slot. Without one it renders a quiet
+ * grey frame stating what shot belongs there — the layout does not move when
+ * the real file arrives.
+ */
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  image?: ImageMetadata;
+  alt?: string;
+  /** CSS aspect-ratio value, e.g. "4 / 5". Ignored when `fill` is set. */
+  ratio?: string;
+  /** Fill the parent box (parent must be position:relative). */
+  fill?: boolean;
+  /** `sizes` attribute — how wide the slot renders. Defaults to full width. */
+  sizes?: string;
+  /** Candidate widths for the srcset. */
+  widths?: number[];
+  /** CSS object-position, e.g. "50% 30%". */
+  position?: string;
+  /** Above-the-fold image: eager + high fetch priority. */
+  priority?: boolean;
+  /** Art direction shown on the placeholder. */
+  brief?: string;
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+
+const {
+  image,
+  alt = '',
+  ratio = '4 / 3',
+  fill = false,
+  sizes = '100vw',
+  widths = [640, 960, 1280, 1600, 2000, 2560],
+  position = '50% 50%',
+  priority = false,
+  brief = 'Photography to be supplied',
+  tone = 'light',
+  class: className,
+} = Astro.props;
+
+const box = fill ? 'absolute inset-0 h-full w-full' : 'block w-full';
+const ratioStyle = fill ? '' : `aspect-ratio:${ratio};`;
+const usable = image ? widths.filter((w) => w <= image.width) : [];
+---
+
+{
+  image ? (
+    <Picture
+      src={image}
+      alt={alt}
+      formats={['avif', 'webp']}
+      widths={usable.length ? usable : [image.width]}
+      sizes={sizes}
+      loading={priority ? 'eager' : 'lazy'}
+      fetchpriority={priority ? 'high' : undefined}
+      decoding={priority ? 'sync' : 'async'}
+      pictureAttributes={{ class: `${box} ${className ?? ''}`.trim(), style: ratioStyle }}
+      class="h-full w-full object-cover"
+      style={`object-position:${position}`}
+    />
+  ) : (
+    <div
+      class:list={[
+        box,
+        'relative flex items-end overflow-hidden',
+        tone === 'dark' ? 'bg-gray-800 text-white/55' : 'bg-gray-100 text-slate',
+        className,
+      ]}
+      style={ratioStyle}
+      role="img"
+      aria-label={brief}
+    >
+      <p class="m-5 max-w-[30ch] label leading-relaxed portrait:m-4 portrait:text-small">
+        {brief}
+      </p>
+    </div>
+  )
+}

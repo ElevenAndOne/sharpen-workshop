@@ -1,0 +1,117 @@
+---
+import Section from '../layout/Section.astro';
+import Container from '../layout/Container.astro';
+import Logo from '../ui/Logo.astro';
+import SocialIcon from '../ui/SocialIcon.astro';
+import { event, links, nav, contacts, social } from '../../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<Section as="footer" tone="dark" spacing="md">
+  <Container width="wide">
+    <div
+      class="grid grid-cols-[1.4fr_1fr_1fr] gap-16 tablet:gap-10 landscape:grid-cols-2 portrait:grid-cols-1 portrait:gap-10"
+    >
+      <div class="flex flex-col gap-6">
+        <a href={links.home} class="w-fit text-white transition-opacity hover:opacity-75">
+          <Logo height={48} />
+        </a>
+        <div class="flex flex-col gap-1.5">
+          <p class="font-display text-body font-black tracking-[-0.015em] text-white">
+            {event.name}
+          </p>
+          <p class="text-body text-white/55">
+            {event.dateLine} · {event.city}
+          </p>
+          <p class="text-body text-white/55">{event.venue.name}</p>
+        </div>
+        <p class="text-tagline text-body leading-snug text-white/75">
+          {event.tagline}
+        </p>
+      </div>
+
+      <nav aria-label="Footer" class="flex flex-col gap-4">
+        <p class="label text-white/40">
+          This page
+        </p>
+        <ul class="flex flex-col gap-2.5">
+          {
+            nav.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="text-body text-white/70 transition-colors duration-200 hover:text-white"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+          <li>
+            <a
+              href={links.checkout}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-body font-black text-brand transition-colors duration-200 hover:text-white"
+            >
+              Register
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="flex flex-col gap-4">
+        <p class="label text-white/40">
+          Contact
+        </p>
+        <ul class="flex flex-col gap-3.5">
+          {
+            contacts.map((c) => (
+              <li class="flex flex-col gap-0.5">
+                <span class="text-body font-black text-white/85">{c.name}</span>
+                <a
+                  href={`mailto:${c.email}`}
+                  class="text-body text-white/55 transition-colors hover:text-white"
+                >
+                  {c.email}
+                </a>
+                <a
+                  href={c.phoneHref}
+                  class="font-mono text-small text-white/45 transition-colors hover:text-white"
+                >
+                  {c.phone}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <ul class="mt-3 flex items-center gap-3">
+          {
+            social.map((sn) => (
+              <li>
+                <a
+                  href={sn.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${sn.label} (opens in a new tab)`}
+                  class="flex size-11 items-center justify-center rounded-[2px] text-white/70 ring-1 ring-inset ring-white/15 transition-colors duration-200 hover:bg-brand hover:text-white hover:ring-brand"
+                >
+                  <SocialIcon name={sn.id} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div
+      class="mt-16 flex items-center gap-6 border-t border-line-dark pt-7 tablet:mt-12 portrait:flex-col portrait:items-start portrait:gap-3"
+    >
+      <p class="text-small text-white/40">
+        &copy; {year} Chef Deb Coaching. All rights reserved.
+      </p>
+    </div>
+  </Container>
+</Section>

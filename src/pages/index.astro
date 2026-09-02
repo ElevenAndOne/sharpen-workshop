@@ -1,0 +1,40 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AnnouncementBar from '../components/sections/AnnouncementBar.astro';
+import SiteHeader from '../components/sections/SiteHeader.astro';
+import Hero from '../components/sections/Hero.astro';
+import Details from '../components/sections/Details.astro';
+import VideoSection from '../components/sections/VideoSection.astro';
+import BringAFriend from '../components/sections/BringAFriend.astro';
+import Tickets from '../components/sections/Tickets.astro';
+import Agenda from '../components/sections/Agenda.astro';
+import PhotoStrip from '../components/sections/PhotoStrip.astro';
+import Sponsors from '../components/sections/Sponsors.astro';
+import Testimonials from '../components/sections/Testimonials.astro';
+import WhereToStay from '../components/sections/WhereToStay.astro';
+import Faq from '../components/sections/Faq.astro';
+import FinalCta from '../components/sections/FinalCta.astro';
+import SiteFooter from '../components/sections/SiteFooter.astro';
+---
+
+<Layout>
+  <AnnouncementBar />
+  <SiteHeader />
+
+  <main id="main">
+    <Hero />
+    <Details />
+    <VideoSection />
+    <BringAFriend />
+    <Tickets />
+    <Agenda />
+    <PhotoStrip />
+    <Sponsors />
+    <Testimonials />
+    <WhereToStay />
+    <Faq />
+    <FinalCta />
+  </main>
+
+  <SiteFooter />
+</Layout>

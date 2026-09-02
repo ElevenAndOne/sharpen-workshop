@@ -1,0 +1,117 @@
+---
+/**
+ * Announcement strip. The whole bar is one link to checkout — it exists to
+ * get people to register, so it behaves like a button, not a headline.
+ *
+ * Seamless loop: the track holds two identical copies and slides exactly one
+ * copy-width (-50%). Each copy repeats the message set several times so a
+ * single copy is always wider than the viewport — otherwise on a wide monitor
+ * the loop shows an empty gap on the right, which is what "looks broken".
+ */
+import { event, links } from '../../data/site';
+
+const messages = [
+  `Early Bird ends ${event.earlyBirdEndsLabel} — save $100`,
+  'Register now',
+  `${event.seats} seats · ${event.dateShort} · ${event.city}`,
+];
+
+/* Enough repetitions that one copy comfortably exceeds ~4000px. */
+const REPEAT = 5;
+const items = Array.from({ length: REPEAT }, () => messages).flat();
+---
+
+<a
+  href={links.checkout}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="marquee group relative block overflow-hidden bg-brand text-white transition-colors duration-200 hover:bg-brand-deep focus-visible:outline-offset-[-3px]"
+  aria-label={`${messages[0]}. Register now (opens in a new tab)`}
+>
+  <!-- Reduced motion: one static line, no animation -->
+  <span
+    class="hidden items-center justify-center gap-3 py-2.5 label motion-reduce:flex"
+  >
+    {messages[0]}
+    <span class="size-1.5 rotate-45 bg-gold" aria-hidden="true"></span>
+    Register now
+  </span>
+
+  <div class="marquee-track flex w-max motion-reduce:hidden" aria-hidden="true">
+    {
+      [0, 1].map(() => (
+        <ul class="flex shrink-0 items-center py-2.5">
+          {items.map((text) => (
+            <li class="flex items-center">
+              <span
+                class:list={[
+                  'px-7 label whitespace-nowrap',
+                  text === 'Register now' && 'underline decoration-white/50 underline-offset-[5px] group-hover:decoration-white',
+                ]}
+              >
+                {text}
+              </span>
+              <span class="size-1.5 rotate-45 bg-gold" />
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+</a>
+
+<style>
+  /* CSS drives the loop when JS is unavailable; the script below takes over
+     so the speed can ease instead of snapping. */
+  .marquee-track {
+    animation: marquee 110s linear infinite;
+    will-change: transform;
+  }
+  @keyframes marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+</style>
+
+<script>
+  /*
+    Momentum marquee. Velocity eases toward 0 on hover and back to cruising
+    speed on leave, so the strip slows like something with mass rather than
+    freezing mid-word. ~40px/s cruising — readable, not frantic.
+  */
+  const bar = document.querySelector<HTMLElement>('.marquee');
+  const track = bar?.querySelector<HTMLElement>('.marquee-track');
+
+  if (bar && track && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const SPEED = 0.04; // px per ms
+    let x = 0;
+    let v = 1; // 0..1 fraction of cruising speed
+    let target = 1;
+    let last = performance.now();
+
+    track.style.animation = 'none';
+
+    bar.addEventListener('pointerenter', () => { target = 0; });
+    bar.addEventListener('pointerleave', () => { target = 1; });
+    bar.addEventListener('focusin', () => { target = 0; });
+    bar.addEventListener('focusout', () => { target = 1; });
+    document.addEventListener('visibilitychange', () => { last = performance.now(); });
+
+    const frame = (now: number) => {
+      const dt = Math.min(48, now - last);
+      last = now;
+
+      // exponential approach: ~220ms time constant
+      v += (target - v) * (1 - Math.exp(-dt / 220));
+      x -= SPEED * v * dt;
+
+      const half = track.scrollWidth / 2;
+      if (half > 0 && -x >= half) x += half;
+
+      track.style.transform = `translate3d(${x}px, 0, 0)`;
+      requestAnimationFrame(frame);
+    };
+
+    requestAnimationFrame(frame);
+  }
+</script>

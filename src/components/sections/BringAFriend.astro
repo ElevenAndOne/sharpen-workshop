@@ -1,0 +1,43 @@
+---
+/**
+ * Bring a friend — a 50/50 split. The photograph makes the point (two owners
+ * at a table); the copy just names the offer and the code.
+ */
+import Section from '../layout/Section.astro';
+import Badge from '../ui/Badge.astro';
+import ImageFrame from '../ui/ImageFrame.astro';
+import { bringAFriend } from '../../data/tickets';
+import pair from '../../assets/images/deb-client-red-wall.jpg';
+---
+
+<Section tone="white" spacing="none" clip>
+  <div class="grid grid-cols-2 landscape:grid-cols-1">
+    <div class="reveal-clip relative min-h-[44rem] tablet:min-h-[36rem] landscape:aspect-[16/10] landscape:min-h-0 portrait:aspect-[4/3]" data-reveal>
+      <ImageFrame
+        fill
+        image={pair}
+        alt="Chef Deb and a culinary business owner working side by side at a table."
+        sizes="(width <= 1023px) 100vw, 50vw"
+        position="50% 40%"
+      />
+    </div>
+
+    <div
+      class="flex flex-col justify-center px-24 py-28 tablet:px-14 tablet:py-20 landscape:px-6 landscape:py-16 portrait:px-5 portrait:py-14"
+    >
+      <div class="reveal flex max-w-[32rem] flex-col gap-6" data-reveal>
+        <Badge tone="brand">Bring a friend</Badge>
+        <h2 class="text-display text-ink-deep">{bringAFriend.heading}</h2>
+        <p class="text-body text-slate">{bringAFriend.body}</p>
+
+        <div class="mt-4 flex flex-col gap-3 border-t border-line pt-6">
+          <p class="text-heading font-black text-ink-deep">{bringAFriend.offer}</p>
+          <p class="flex items-center gap-2.5 text-slate">
+            with code
+            <Badge tone="gold">{bringAFriend.code}</Badge>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</Section>

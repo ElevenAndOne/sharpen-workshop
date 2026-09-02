@@ -1,0 +1,81 @@
+---
+/**
+ * The close — Deb's personal invitation over a photograph, signed.
+ * Mirrors how the live brand closes its Sharpen page.
+ */
+import Section from '../layout/Section.astro';
+import Container from '../layout/Container.astro';
+import Button from '../ui/Button.astro';
+import ImageFrame from '../ui/ImageFrame.astro';
+import { event, links } from '../../data/site';
+import deb from '../../assets/images/deb-presenting-laptop.jpg';
+import PriceTag from '../islands/PriceTag';
+import { tiers } from '../../data/tickets';
+
+const earlyPrice = tiers.find((t) => t.id === 'early-bird')!.price;
+const regularPrice = tiers.find((t) => t.id === 'regular')!.price;
+const initialEarly = Date.now() < new Date(event.earlyBirdEndsAt).getTime();
+
+
+const signature = '/brand/chef-deb-signature.png';
+---
+
+<Section tone="dark" spacing="none" clip class="flex min-h-[40rem] landscape:min-h-0">
+  <!-- photograph + scrim -->
+  <ImageFrame
+    fill
+    image={deb}
+    alt=""
+    sizes="100vw"
+    position="70% 30%"
+  />
+  <div class="pointer-events-none absolute inset-0 bg-gray-950/72" aria-hidden="true"></div>
+  <div
+    class="pointer-events-none absolute inset-0 bg-gradient-to-r from-gray-950/80 via-gray-950/40 to-transparent"
+    aria-hidden="true"
+  >
+  </div>
+
+  <Container width="wide" class="flex flex-col justify-center py-32 tablet:py-28 landscape:py-20 portrait:py-16">
+    <div class="reveal flex max-w-[40rem] flex-col gap-7" data-reveal>
+      <h2 class="text-display text-white">Two days. Then a different 2027.</h2>
+
+      <p class="max-w-[52ch] text-body text-white/80">
+        I want to personally invite you to step away from your business for two days. I know
+        that isn't easy. But if you make that commitment to yourself, your life and business
+        will look so much different in 2027.
+      </p>
+
+      <!-- Signature: white-painted mask of the scanned signature -->
+      <span
+        class="mt-1 inline-block h-12 w-[10.4rem] bg-white/90 portrait:h-10 portrait:w-[8.7rem]"
+        style={`-webkit-mask-image:url(${signature}); mask-image:url(${signature});
+          -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+          -webkit-mask-size:contain; mask-size:contain;
+          -webkit-mask-position:left center; mask-position:left center;`}
+        role="img"
+        aria-label="Chef Deb"
+      ></span>
+
+      <div class="mt-3 flex flex-wrap items-center gap-4 portrait:flex-col portrait:items-stretch portrait:gap-3">
+        <Button href={links.checkout} variant="primary" size="lg" external stack>
+          Grab your seat —{' '}
+          <PriceTag
+            early={earlyPrice}
+            regular={regularPrice}
+            earlyBirdEndsAt={event.earlyBirdEndsAt}
+            initialEarly={initialEarly}
+            client:load
+          />
+        </Button>
+        <Button href={links.agendaPdf} variant="quiet" class="text-white" external stack>
+          Download the full agenda (PDF)
+        </Button>
+      </div>
+
+      <p class="label text-white/55">
+        {event.seats} seats · {event.dateShort} · Registration closes {event.registrationClosesLabel}
+      </p>
+    </div>
+  </Container>
+</Section>

@@ -1,0 +1,333 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Custom breakpoints — DESKTOP FIRST.
+   Desktop is the primary/base breakpoint (no media query). Everything steps
+   DOWN from there: tablet -> landscape -> portrait.
+   ========================================================================== */
+@theme {
+  /* Kill Tailwind's default min-width breakpoints so only ours are usable. */
+  --breakpoint-*: initial;
+}
+
+/*
+  These are max-width (desktop-first) tiers, so each smaller tier must be able
+  to override the one above it. Tailwind emits max-width media blocks in
+  ASCENDING order — `width <= 767px` first, `width <= 1279px` last — which is
+  backwards for this model: at 375px all three match and the widest would win.
+
+  So ordering is not relied on at all. Each step down adds one level of
+  specificity via `:not(#\9)` (an ID that cannot exist in HTML, since \9 is a
+  tab character). portrait beats landscape beats tablet regardless of the order
+  Tailwind writes them out in.
+*/
+@custom-variant desktop (@media (width >= 1280px));
+
+@custom-variant tablet {
+  @media (width <= 1279px) {
+    @slot;
+  }
+}
+
+@custom-variant landscape {
+  @media (width <= 1023px) {
+    &:not(#\9) {
+      @slot;
+    }
+  }
+}
+
+@custom-variant portrait {
+  @media (width <= 767px) {
+    &:not(#\9):not(#\9) {
+      @slot;
+    }
+  }
+}
+
+/* Handy one-offs that are NOT part of the four-tier system */
+@custom-variant hover-device (@media (hover: hover) and (pointer: fine));
+@custom-variant motion-ok (@media (prefers-reduced-motion: no-preference));
+
+@theme {
+  /* ---------------------------------------------------------------- colour
+     Neutral-first. Greys carry the page; red is the accent; gold only hints
+     at something different (a saving, a TBD, a note). */
+  --color-white: #ffffff;
+  --color-gray-50: #f6f6f6;
+  --color-gray-100: #ececec;
+  --color-gray-200: #dcdcdc;
+  --color-gray-300: #c4c4c4;
+  --color-gray-400: #a3a4a6;
+  --color-gray-500: #8a8b8d;
+  --color-gray-600: #58595b;
+  --color-gray-700: #444546;
+  --color-gray-800: #333333;
+  --color-gray-900: #1f1f1f;
+  --color-gray-950: #161616;
+
+  --color-brand: #c73935;
+  --color-brand-deep: #a52c29;
+  --color-brand-tint: #fbeceb;
+
+  --color-gold: #f7ae07;
+  --color-gold-deep: #c98a03;
+  --color-gold-tint: #fdf3dc;
+
+  /* Semantic aliases used throughout the components */
+  --color-ink: var(--color-gray-800);       /* body copy */
+  --color-ink-deep: var(--color-gray-900);  /* headings */
+  --color-slate: var(--color-gray-600);     /* secondary copy */
+  --color-slate-soft: var(--color-gray-500);
+  --color-fill: var(--color-gray-100);
+  --color-fill-deep: var(--color-gray-200);
+  --color-line: var(--color-gray-200);      /* hairlines on light */
+  --color-line-dark: rgb(255 255 255 / 0.12); /* hairlines on dark */
+
+  /* ------------------------------------------------------------ typography */
+  --font-sans: "Mulish Variable", "Mulish", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Mulish Variable", "Mulish", ui-sans-serif, system-ui, sans-serif;
+  /* The page outline names "Gistesy" for the tagline, but the live brand
+     site uses no script face at all — taglines and pull-quotes are Mulish
+     Italic. That is what ships. If a licensed Gistesy file is supplied later,
+     point this token at it and the tagline utility below picks it up. */
+  --font-script: "Mulish Variable", "Mulish", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "Menlo", monospace;
+
+  /* Four-step type scale. Everything on the page is one of these, plus two
+     numeric exceptions (price, countdown) that earn their own size. */
+  --text-display: clamp(2.6rem, 4vw, 4rem);          /* h1 */
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.028em;
+
+  --text-heading: clamp(1.85rem, 2.6vw, 2.5rem);     /* h2 — every section */
+  --text-heading--line-height: 1.1;
+  --text-heading--letter-spacing: -0.02em;
+
+  --text-body: 1.0625rem;                             /* paragraph, titles, links */
+  --text-body--line-height: 1.65;
+
+  --text-small: 0.75rem;                              /* labels, buttons, captions */
+  --text-small--line-height: 1.4;
+
+  --text-price: clamp(3.25rem, 4.8vw, 4.75rem);       /* the ticket price */
+  --text-price--line-height: 0.9;
+  --text-price--letter-spacing: -0.04em;
+
+  --text-numeral: 1.3rem;                             /* countdown digits, struck price */
+  --text-numeral--line-height: 1;
+
+  /* ------------------------------------------------------- container widths */
+  --container-narrow: 46rem;   /* 736px  — long-form copy */
+  --container-content: 68rem;  /* 1088px — standard content */
+  --container-site: 85rem;     /* 1360px — default page width */
+  --container-wide: 97.5rem;   /* 1560px — full editorial spreads */
+
+  /* ------------------------------------------------------------- ornaments */
+  --radius-card: 2px;
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-white);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-synthesis-weight: none;
+  }
+
+  /* Anchor targets clear the sticky header */
+  :where(section, div)[id] { scroll-margin-top: 6rem; }
+
+  ::selection {
+    background-color: var(--color-brand);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 900;
+    text-wrap: balance;
+  }
+
+  p { text-wrap: pretty; }
+
+  img, svg, video { display: block; max-width: 100%; }
+
+  table { border-collapse: collapse; }
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+
+/* ==========================================================================
+   Motion. Three authored moments, each tied to what the element is:
+   type arrives into its baseline (line mask), photographs open like a blind
+   (clip-path), and lists reflow top-to-bottom (stagger). Everything fires
+   once, from an already-visible default, and is skipped under reduced motion.
+   ========================================================================== */
+
+/* Text blocks: a short rise. Quiet on purpose — the headline and photos carry
+   the motion, this only keeps supporting copy from popping in. */
+@utility reveal {
+  @media (prefers-reduced-motion: no-preference) {
+    &[data-reveal="pending"] {
+      opacity: 0;
+      transform: translate3d(0, 10px, 0);
+    }
+    &[data-reveal] {
+      transition:
+        opacity 0.6s var(--ease-out-quint),
+        transform 0.6s var(--ease-out-quint);
+    }
+    &[data-reveal="shown"] {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Line-mask reveal: each `.line` clips a child that slides up into place.
+   Stagger with `--i` on the line. */
+@utility reveal-lines {
+  & .line {
+    display: block;
+    overflow: hidden;
+    /* keep descenders from being clipped */
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    &[data-reveal="pending"] .line > * {
+      transform: translate3d(0, 112%, 0);
+      opacity: 0;
+    }
+    &[data-reveal] .line > * {
+      transition:
+        transform 0.85s var(--ease-out-expo),
+        opacity 0.5s linear;
+      transition-delay: calc(var(--i, 0) * 90ms);
+    }
+    &[data-reveal="shown"] .line > * {
+      transform: none;
+      opacity: 1;
+    }
+  }
+}
+
+/* Photograph shutter: a single left-to-right wipe, once. */
+@utility reveal-clip {
+  @media (prefers-reduced-motion: no-preference) {
+    &[data-reveal="pending"] {
+      clip-path: inset(0 0 0 100%);
+    }
+    &[data-reveal] {
+      transition: clip-path 1.1s cubic-bezier(0.77, 0, 0.175, 1);
+      transition-delay: calc(var(--i, 0) * 120ms);
+    }
+    &[data-reveal="shown"] {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+}
+
+/* List rows entering after a tab change: top-to-bottom stagger via --i. */
+@keyframes row-enter {
+  from { opacity: 0; transform: translate3d(0, 8px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+@utility row-enter {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: row-enter 0.42s cubic-bezier(0.65, 0, 0.35, 1) both;
+    animation-delay: calc(var(--i, 0) * 40ms);
+  }
+}
+
+/* Countdown digit: slides up into its clipped box when the value changes.
+   Pure translate — the clip does the work, nothing fades. */
+@keyframes digit-roll {
+  from { transform: translate3d(0, 100%, 0); }
+  to   { transform: none; }
+}
+@utility digit-roll {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: digit-roll 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+/* Card hover: a 2px red rule draws across the top edge, left to right.
+   Crisp and mechanical — no lift, no shadow, no scale. */
+@utility card-rule {
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    height: 2px;
+    width: 100%;
+    background: var(--color-brand);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.45s var(--ease-out-expo);
+  }
+  @media (hover: hover) {
+    &:hover::after { transform: scaleX(1); }
+  }
+}
+
+/* Accordion body: grid rows 0fr -> 1fr, no height measurement. */
+@utility accordion-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  & > * { overflow: hidden; }
+  &[data-open="true"] { grid-template-rows: 1fr; }
+  @media (prefers-reduced-motion: reduce) { transition: none; }
+}
+
+/* Small uppercase label — the single small voice (tier names, day labels,
+   column headers, captions, the hero footnote). */
+@utility label {
+  font-size: var(--text-small);
+  line-height: var(--text-small--line-height);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+/* Tagline / pull-quote voice: Mulish Italic, medium weight. */
+@utility text-tagline {
+  font-family: var(--font-script);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+}
+

@@ -1,0 +1,217 @@
+---
+import '@fontsource-variable/mulish';
+import '../styles/global.css';
+import { event, links } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+}
+
+const {
+  title = `${event.name} — ${event.tagline} | Chef Deb`,
+  description = `${event.name}. ${event.dateLine} in ${event.city}. Two days of working on your culinary business instead of in it. Fifty seats, no fluff, nobody selling you a course from the stage.`,
+  canonical = 'https://chefdeb.com/sharpen-2-day-workshop/',
+} = Astro.props;
+
+/* Event structured data — this is a real, dated, ticketed event. */
+const eventSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BusinessEvent',
+  name: event.name,
+  description,
+  startDate: '2027-01-28T09:00:00-06:00',
+  endDate: '2027-01-29T17:00:00-06:00',
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  eventStatus: 'https://schema.org/EventScheduled',
+  location: {
+    '@type': 'Place',
+    name: event.venue.name,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: event.venue.detail,
+      addressLocality: 'Fort Worth',
+      addressRegion: 'TX',
+      addressCountry: 'US',
+    },
+  },
+  organizer: {
+    '@type': 'Organization',
+    name: 'Chef Deb Coaching',
+    url: links.home,
+  },
+  maximumAttendeeCapacity: event.seats,
+  offers: [
+    {
+      '@type': 'Offer',
+      name: 'Early Bird',
+      price: '395',
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
+      url: links.checkout,
+      validThrough: event.earlyBirdEndsAt,
+    },
+    {
+      '@type': 'Offer',
+      name: 'Regular',
+      price: '495',
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
+      url: links.checkout,
+      validThrough: event.registrationClosesAt,
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Chef Deb Coaching" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#141414" />
+
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(eventSchema)}
+    />
+  </head>
+
+  <body id="top">
+    <!--
+      DIRECTION CONTRACT — SHARPEN 2027 landing page
+      THESIS: A working room, not a stage. One photograph of owners at work carries
+        the first screen; the page refuses the conference masthead — giant type,
+        numbered sections, patterned backgrounds — and lets imagery persuade.
+      OWN-WORLD: Neutral greys carry every surface; red is the only action colour
+        and the tagline's voice; gold appears only as a hint (a saving, a TBD).
+        Mulish Black headings, Mulish Italic for Deb's voice. Sharp red buttons
+        with the brand's thin offset outline. Candid documentary photography,
+        full-bleed. Whitespace separates; no rules, no patterns.
+      STORY: An owner sees a real room of peers working, understands it is two
+        days on the business (50 seats, $395), and grabs a seat — or previews the
+        agenda, or enquires about sponsoring.
+      FIRST VIEWPORT: Red announcement strip; dark nav; full-bleed photo of the
+        SHARPEN room with a bottom-left gradient; headline "SHARPEN 2027" (~4rem,
+        white) over an italic tagline, one proof line, then the CTA row: solid
+        "Grab your seat — $395", outline "Become a sponsor", text "Preview the
+        agenda".
+      FORM: Brand-native, pinned by the client (chefdeb.com full-bleed hero and
+        the live /sharpen-2027/ rhythm); no direction roll — pinned beats the roll.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the
+        finish review, the verdict, DESIGN.md, and every shipping raster carrying
+        its provenance.
+    -->
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:rounded-[2px] focus:bg-brand focus:px-5 focus:py-3 focus:font-display focus:text-small focus:font-black focus:tracking-[0.1em] focus:text-white focus:uppercase"
+    >
+      Skip to content
+    </a>
+
+    <slot />
+
+    <!--
+      Scroll reveal, strictly additive.
+
+      Content is visible by default. This only hides an element it can prove
+      it will bring back: the sweep runs on rAF with a timer backup, a hidden
+      tab or reduced motion skips the animation entirely, and backgrounding
+      the tab mid-scroll shows whatever is left.
+    -->
+    <script is:inline>
+      (() => {
+        const targets = Array.from(document.querySelectorAll('[data-reveal]'));
+        if (!targets.length) return;
+
+        const show = (el) => el.setAttribute('data-reveal', 'shown');
+
+        /* Bail out to plain visible content when we cannot drive an animation. */
+        if (
+          document.hidden ||
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ) {
+          targets.forEach(show);
+          return;
+        }
+
+        const threshold = () => window.innerHeight * 0.92;
+
+        /* Everything starts pending and the first sweep runs on the next
+           frame, so above-the-fold blocks (the hero) play their entrance.
+           The timer and visibility fallbacks below mean nothing can be left
+           hidden if that frame never comes. */
+        targets.forEach((el) => el.setAttribute('data-reveal', 'pending'));
+        let pending = targets;
+
+        let queued = false;
+
+        const sweep = () => {
+          queued = false;
+          const limit = threshold();
+          const still = [];
+
+          for (const el of pending) {
+            if (el.getBoundingClientRect().top < limit) {
+              const delay = Number(el.getAttribute('data-reveal-delay') || 0);
+              if (delay) window.setTimeout(() => show(el), delay);
+              else show(el);
+            } else {
+              still.push(el);
+            }
+          }
+
+          pending = still;
+          if (!pending.length) teardown();
+        };
+
+        /* rAF keeps layout reads off the scroll thread; the timer is a backup
+           in case rAF is frozen. sweep() is idempotent, so either may win. */
+        const request = () => {
+          if (queued) return;
+          queued = true;
+          window.requestAnimationFrame(sweep);
+          window.setTimeout(sweep, 250);
+        };
+
+        /* If the tab is backgrounded mid-scroll, stop gambling on animation
+           frames and just show whatever is left. */
+        const onVisibility = () => {
+          if (document.hidden) {
+            pending.forEach(show);
+            pending = [];
+            teardown();
+          }
+        };
+
+        function teardown() {
+          window.removeEventListener('scroll', request);
+          window.removeEventListener('resize', request);
+          document.removeEventListener('visibilitychange', onVisibility);
+        }
+
+        window.addEventListener('scroll', request, { passive: true });
+        window.addEventListener('resize', request, { passive: true });
+        document.addEventListener('visibilitychange', onVisibility);
+        window.addEventListener('load', request);
+
+        request();
+      })();
+    </script>
+  </body>
+</html>

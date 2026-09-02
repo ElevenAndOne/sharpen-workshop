@@ -1,0 +1,20 @@
+---
+import SiteNav from '../islands/SiteNav';
+import { nav, links, event } from '../../data/site';
+import { tiers } from '../../data/tickets';
+
+const earlyPrice = tiers.find((t) => t.id === 'early-bird')!.price;
+const regularPrice = tiers.find((t) => t.id === 'regular')!.price;
+const initialEarly = Date.now() < new Date(event.earlyBirdEndsAt).getTime();
+---
+
+<SiteNav
+  items={[...nav]}
+  checkoutHref={links.checkout}
+  logoSrc="/brand/chefdeb-logo-white.png"
+  earlyPrice={earlyPrice}
+  regularPrice={regularPrice}
+  earlyBirdEndsAt={event.earlyBirdEndsAt}
+  initialEarly={initialEarly}
+  client:load
+/>

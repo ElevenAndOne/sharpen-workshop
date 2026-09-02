@@ -1,0 +1,85 @@
+---
+import Section from '../layout/Section.astro';
+import Container from '../layout/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Button from '../ui/Button.astro';
+import VideoEmbed from '../islands/VideoEmbed';
+import { links, event } from '../../data/site';
+import { getImage } from 'astro:assets';
+import posterSrc from '../../assets/images/deb-client-red-wall-2.jpg';
+import PriceTag from '../islands/PriceTag';
+import { tiers } from '../../data/tickets';
+
+const earlyPrice = tiers.find((t) => t.id === 'early-bird')!.price;
+const regularPrice = tiers.find((t) => t.id === 'regular')!.price;
+const initialEarly = Date.now() < new Date(event.earlyBirdEndsAt).getTime();
+
+
+const poster = await getImage({ src: posterSrc, width: 1000, format: 'webp' });
+
+const points = [
+  ['Fifty owners', 'One room, two full days.'],
+  ['Every session', 'Ends in something written down.'],
+  ['You leave with', 'A One-Page Strategic Plan for 2027.'],
+];
+---
+
+<Section tone="dark" spacing="lg" clip>
+  <Container width="wide">
+    <div
+      class="grid grid-cols-[1fr_0.62fr] items-center gap-24 tablet:gap-14 landscape:grid-cols-1 landscape:gap-12"
+    >
+      <div class="reveal flex flex-col gap-10 landscape:gap-8" data-reveal>
+        <SectionHeading tone="light">Here's what you're walking into.</SectionHeading>
+
+        <p class="max-w-[52ch] text-body text-white/75">{event.hero.lines[1]}</p>
+
+        <dl class="grid grid-cols-3 gap-8 portrait:grid-cols-1 portrait:gap-6">
+          {
+            points.map(([term, detail]) => (
+              <div class="flex flex-col gap-2 border-t border-line-dark pt-5">
+                <dt class="label text-white/55">{term}</dt>
+                <dd class="text-body text-white">{detail}</dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        <div class="flex flex-wrap items-center gap-4 portrait:flex-col portrait:items-stretch portrait:gap-3">
+          <Button href={links.instagram} variant="outlineLight" size="lg" external stack>
+            Watch on Instagram
+          </Button>
+          <Button href={links.checkout} variant="quiet" class="text-white" external stack>
+            Grab your seat —{' '}
+            <PriceTag
+              early={earlyPrice}
+              regular={regularPrice}
+              earlyBirdEndsAt={event.earlyBirdEndsAt}
+              initialEarly={initialEarly}
+              client:load
+            />
+          </Button>
+        </div>
+      </div>
+
+      <div class="reveal mx-auto w-full max-w-[26rem] landscape:max-w-[22rem]" data-reveal data-reveal-delay="140">
+        <!--
+          Neither video in the page outline is Chef Deb's (the YouTube short is a
+          Mel Robbins clip; the reel is from another account), so nothing is
+          embedded. Set youtubeId to the real 60-second cut and the click-to-play
+          facade takes over automatically.
+        -->
+        <VideoEmbed
+          youtubeId={null}
+          title="Inside SHARPEN, in 60 seconds"
+          fallbackHref={links.instagram}
+          fallbackLabel="Watch on Instagram"
+          brief="60-second reel from SHARPEN 2026 — coming soon"
+          poster={poster.src}
+          client:visible
+        />
+        <p class="label mt-4 text-center text-white/45">60-second reel · coming soon</p>
+      </div>
+    </div>
+  </Container>
+</Section>

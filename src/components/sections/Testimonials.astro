@@ -1,0 +1,49 @@
+---
+import Section from '../layout/Section.astro';
+import Container from '../layout/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import { testimonials, pullQuote } from '../../data/social-proof';
+---
+
+<Section tone="white" spacing="lg">
+  <Container width="wide">
+    <SectionHeading class="reveal" data-reveal>
+      We think SHARPEN is worth it, but don't take our word for it
+    </SectionHeading>
+
+    <ul
+      class="mt-12 grid grid-cols-4 gap-6 tablet:grid-cols-2 landscape:mt-10 portrait:mt-8 portrait:grid-cols-1"
+    >
+      {
+        testimonials.map((t, i) => (
+          <li
+            class="reveal flex flex-col justify-between gap-8 bg-gray-50 p-7"
+            data-reveal
+            data-reveal-delay={i * 80}
+          >
+            <blockquote class="text-body text-ink">&ldquo;{t.quote}&rdquo;</blockquote>
+
+            <footer class="flex flex-col gap-1 border-t-2 border-brand pt-4">
+              <cite class="font-display text-body font-black text-ink-deep not-italic">
+                {t.name}
+              </cite>
+              <span class="label text-slate">
+                {t.business}
+              </span>
+            </footer>
+          </li>
+        ))
+      }
+    </ul>
+
+    <figure
+      class="reveal mt-20 flex flex-col items-center gap-4 text-center tablet:mt-16 landscape:mt-14 portrait:mt-12"
+      data-reveal
+    >
+      <blockquote class="max-w-[30ch] text-center text-tagline text-heading text-brand">
+        {pullQuote}
+      </blockquote>
+      <figcaption class="label text-slate">Chef Deb</figcaption>
+    </figure>
+  </Container>
+</Section>

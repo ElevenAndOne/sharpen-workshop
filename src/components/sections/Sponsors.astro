@@ -1,0 +1,51 @@
+---
+import Section from '../layout/Section.astro';
+import Container from '../layout/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Button from '../ui/Button.astro';
+import { sponsorTiers, sponsorIntro } from '../../data/social-proof';
+import { links } from '../../data/site';
+---
+
+<Section id="sponsor" tone="gray" spacing="lg">
+  <Container width="wide" edges>
+    <div
+      class="grid grid-cols-[0.8fr_1.2fr] items-start gap-20 tablet:gap-12 landscape:grid-cols-1 landscape:gap-10"
+    >
+      <div class="reveal flex flex-col gap-7" data-reveal>
+        <SectionHeading>Sponsors keep the ticket honest.</SectionHeading>
+        <p class="max-w-[42ch] text-body leading-relaxed text-slate">
+          {sponsorIntro}
+        </p>
+        <div class="flex flex-wrap items-center gap-3.5 portrait:flex-col portrait:items-stretch portrait:gap-3">
+          <Button href={links.sponsorEnquiry} variant="primary" stack size="md">
+            Become a sponsor
+          </Button>
+          <Button href={links.sponsorEnquiry} variant="quiet" stack>
+            Sponsorship package details
+          </Button>
+        </div>
+      </div>
+
+      <div class="reveal flex flex-col gap-12" data-reveal data-reveal-delay="140">
+        {
+          sponsorTiers.map((group) => (
+            <div class="flex flex-col gap-5">
+              <h3 class="label text-slate">{group.tier}</h3>
+              <ul class="grid grid-cols-2 gap-4 portrait:grid-cols-1">
+                {group.sponsors.map((sp) => (
+                  <li class="flex min-h-[5rem] items-center justify-center bg-white px-6 py-5 text-center ring-1 ring-inset ring-line">
+                    <a href={sp.href} target="_blank" rel="noopener noreferrer" class="flex size-full items-center justify-center transition-colors duration-200 hover:text-brand"><span class="font-display text-body font-black tracking-[0.04em] text-ink-deep uppercase">{sp.name}<span class="sr-only"> (opens in a new tab)</span></span></a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+        <p class="text-small leading-relaxed text-slate-soft">
+          Sponsor logos to be supplied — name plates stand in for now.
+        </p>
+      </div>
+    </div>
+  </Container>
+</Section>

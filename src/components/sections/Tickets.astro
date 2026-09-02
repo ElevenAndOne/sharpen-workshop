@@ -1,0 +1,42 @@
+---
+import Section from '../layout/Section.astro';
+import Container from '../layout/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import TicketBox from '../islands/TicketBox';
+import { tiers, bringAFriend } from '../../data/tickets';
+import { event, checkoutUrl, links } from '../../data/site';
+
+/* Pre-build the coupon-bearing checkout URLs on the server so the island
+   ships no URL-assembly logic. Only publicly advertised codes are exposed —
+   the internal comp and scholarship codes stay out of the bundle. */
+const checkoutUrls: Record<string, string> = { default: links.checkout };
+for (const tier of tiers) {
+  if (tier.code) checkoutUrls[tier.code] = checkoutUrl(tier.code);
+}
+---
+
+<Section id="tickets" tone="gray" spacing="lg">
+  <Container width="wide" edges>
+    <div class="reveal mx-auto flex max-w-[44rem] flex-col items-center gap-5 text-center" data-reveal>
+      <SectionHeading align="center">Get your tickets</SectionHeading>
+      <p class="max-w-[40ch] text-body text-slate">
+        One ticket covers both days, all meals and every worksheet.
+      </p>
+    </div>
+
+    <div class="reveal mt-14 landscape:mt-10" data-reveal data-reveal-delay="120">
+      <TicketBox
+        tiers={tiers}
+        seats={event.seats}
+        earlyBirdEndsAt={event.earlyBirdEndsAt}
+        earlyBirdEndsLabel={event.earlyBirdEndsLabel}
+        registrationClosesAt={event.registrationClosesAt}
+        registrationClosesLabel={event.registrationClosesLabel}
+        checkoutUrls={checkoutUrls}
+        friendCode={bringAFriend.code}
+        eventDate={`${event.name} · ${event.dateShort} · ${event.city}`}
+        client:load
+      />
+    </div>
+  </Container>
+</Section>
