@@ -23,7 +23,7 @@ interface Props {
   registrationClosesLabel: string;
   /** Pre-built checkout URLs keyed by coupon code, plus a bare `default`. */
   checkoutUrls: Record<string, string>;
-  friendCode: string;
+  colleagueCode: string;
   /** "SHARPEN 2027 · Jan. 28–29, 2027 · Fort Worth" — stated on every card so
       the year is unmissable before the (older) Thrivecart page loads. */
   eventDate: string;
@@ -39,7 +39,7 @@ export default function TicketBox({
   registrationClosesAt,
   registrationClosesLabel,
   checkoutUrls,
-  friendCode,
+  colleagueCode,
   eventDate,
 }: Props) {
   /* Once Early Bird closes the block collapses to the Regular card and the
@@ -158,7 +158,7 @@ export default function TicketBox({
         <span className="size-1.5 rotate-45 bg-gold portrait:hidden" aria-hidden="true" />
         <p className="flex items-center gap-2.5">
           Bringing someone? Second ticket half off with code
-          <span className="label inline-flex items-center bg-gold px-2 py-1 text-gray-900">{friendCode}</span>
+          <span className="label inline-flex items-center bg-gold px-2 py-1 text-gray-900">{colleagueCode}</span>
         </p>
       </div>
     </div>

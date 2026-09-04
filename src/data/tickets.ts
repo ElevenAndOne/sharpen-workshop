@@ -37,8 +37,8 @@ export const tiers: Tier[] = [
   },
 ];
 
-/** Section 5 — Bring a Friend. */
-export const bringAFriend = {
+/** Section 5 — Bring a Colleague. */
+export const bringAColleague = {
   heading: 'The best ideas from SHARPEN rarely stay at SHARPEN.',
   body: 'Bring your business partner or your GM. Work through it together and go home with a shared plan instead of a summary.',
   offer: 'Second ticket half off',

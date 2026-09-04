@@ -16,6 +16,9 @@ interface Props {
   /** Optional still shown behind the pending state so the slot reads as a
       video poster rather than an empty box. */
   poster?: string;
+  /** CSS object-position for the still. The slot is 9:16 (a reel), so a
+      landscape source needs steering or the crop lands between faces. */
+  posterPosition?: string;
 }
 
 /**
@@ -30,6 +33,7 @@ export default function VideoEmbed({
   fallbackLabel,
   brief,
   poster,
+  posterPosition = '50% 50%',
 }: Props) {
   const [playing, setPlaying] = useState(false);
 
@@ -50,6 +54,7 @@ export default function VideoEmbed({
             alt=""
             loading="lazy"
             decoding="async"
+            style={{ objectPosition: posterPosition }}
             className="absolute inset-0 size-full object-cover opacity-80 transition-opacity duration-500 group-hover:opacity-90"
           />
         )}

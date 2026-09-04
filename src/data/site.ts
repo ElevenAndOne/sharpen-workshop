@@ -19,8 +19,15 @@ export const event = {
   /** Registration hard close. */
   registrationClosesLabel: 'Jan. 6, 2027',
   registrationClosesAt: '2027-01-06T23:59:00-06:00',
-  /** Hero copy — matches chefdeb.com/sharpen-2027/ verbatim. */
+  /**
+   * Hero copy. The headline pair leads; the subhead names the audience; the
+   * paragraph below it matches chefdeb.com/sharpen-2027/ verbatim.
+   */
   hero: {
+    /* Non-breaking space keeps the wrap on the sentence break, not after "A". */
+    headline: 'Two days. A\u00A0different 2027.',
+    subhead:
+      "The must-attend event for Food, Beverage & Hospitality leaders shaping what's next",
     heading: "SHARPEN isn't another conference that talks at you.",
     body: "It's two days of working on your business instead of in it, next to owners who understand exactly what you're carrying.",
     lines: [
@@ -75,12 +82,6 @@ export const contacts = [
     email: 'deb@chefdeb.com',
     phone: '512-879-7751',
     phoneHref: 'tel:+15128797751',
-  },
-  {
-    name: 'Heather Sanders',
-    email: 'heather@chefdeb.com',
-    phone: '936-662-3948',
-    phoneHref: 'tel:+19366623948',
   },
 ] as const;
 

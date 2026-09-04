@@ -4,7 +4,14 @@ import Container from '../layout/Container.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 import ImageFrame from '../ui/ImageFrame.astro';
 import { details } from '../../data/details';
-import lanyards from '../../assets/images/sharpen-lanyards.jpg';
+/**
+ * The venue is the point of this slot: the room sits on the third floor of
+ * Meacham International Airport Conference Center and looks straight out over
+ * the runways. Drop the supplied photograph in as
+ * `src/assets/images/venue-runway-view.jpg`, uncomment the import and pass it
+ * to the <ImageFrame> below — until then the frame states the shot it needs.
+ */
+// import venue from '../../assets/images/venue-runway-view.jpg';
 ---
 
 <Section id="details" tone="gray" spacing="lg">
@@ -59,10 +66,9 @@ import lanyards from '../../assets/images/sharpen-lanyards.jpg';
       >
         <ImageFrame
           fill
-          image={lanyards}
-          alt="Two SHARPEN Workshop name badges on red lanyards."
           sizes="(width <= 1023px) 100vw, 40vw"
-          position="50% 45%"
+          position="50% 50%"
+          brief="Meacham International Airport Conference Center — planes on the apron through the room's floor-to-ceiling windows, or the exterior of the conference center."
         />
       </div>
     </div>

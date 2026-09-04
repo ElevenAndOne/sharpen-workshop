@@ -49,12 +49,16 @@ const initialEarly = Date.now() < new Date(event.earlyBirdEndsAt).getTime();
         <span class="line" style="--i:0"><span class="block">{event.name}</span></span>
       </h1>
 
-      <p class="mt-3 text-tagline text-body text-white/90">
-        <span class="line" style="--i:1"><span class="block">{event.tagline}</span></span>
+      <p class="mt-3 text-tagline text-heading text-white">
+        <span class="line" style="--i:1"><span class="block">{event.hero.headline}</span></span>
+      </p>
+
+      <p class="mt-5 max-w-[46ch] text-body text-white/85 portrait:mt-4">
+        <span class="line" style="--i:2"><span class="block">{event.hero.subhead}</span></span>
       </p>
 
       <p class="mt-6 max-w-[46ch] text-body text-white/85 portrait:mt-5">
-        <span class="line" style="--i:2">
+        <span class="line" style="--i:3">
           <span class="block">
             <strong class="font-black text-white">{event.hero.heading}</strong>
             {' '}{event.hero.body}
@@ -63,11 +67,11 @@ const initialEarly = Date.now() < new Date(event.earlyBirdEndsAt).getTime();
       </p>
 
       <p class="mt-4 max-w-[46ch] text-body text-white/70">
-        <span class="line" style="--i:3"><span class="block">{event.hero.lines[0]}</span></span>
+        <span class="line" style="--i:4"><span class="block">{event.hero.lines[0]}</span></span>
       </p>
 
       <!-- CTA hierarchy: one solid, one outline, one text link -->
-      <div class="line mt-9 portrait:mt-7" style="--i:4">
+      <div class="line mt-9 portrait:mt-7" style="--i:5">
         <div class="flex flex-wrap items-center gap-4 portrait:flex-col portrait:items-stretch portrait:gap-3">
           <Button href={links.checkout} variant="primary" size="lg" external stack>
             Grab your seat —{' '}
@@ -87,7 +91,7 @@ const initialEarly = Date.now() < new Date(event.earlyBirdEndsAt).getTime();
       </div>
 
       <p class="label mt-8 text-white/60 portrait:mt-6">
-        <span class="line" style="--i:5"><span class="block">{event.edition} · {event.dateShort} · {event.city} · {event.seats} seats</span></span>
+        <span class="line" style="--i:6"><span class="block">{event.edition} · {event.dateShort} · {event.city} · {event.seats} seats</span></span>
       </p>
     </div>
   </Container>
