@@ -5,13 +5,17 @@ import SectionHeading from '../ui/SectionHeading.astro';
 import ImageFrame from '../ui/ImageFrame.astro';
 import { details } from '../../data/details';
 /**
- * The venue is the point of this slot: the room sits on the third floor of
- * Meacham International Airport Conference Center and looks straight out over
- * the runways. Drop the supplied photograph in as
- * `src/assets/images/venue-runway-view.jpg`, uncomment the import and pass it
- * to the <ImageFrame> below — until then the frame states the shot it needs.
+ * The venue is the point of this slot: the workshop sits on the third floor of
+ * Meacham International Airport Conference Center, looking out over the
+ * runways.
+ *
+ * The frame is taller than the photograph is wide, so the crop is steered onto
+ * the glass tower and the building's name plate. That also means cover-crop
+ * scales the shot by height — it paints roughly 75vw wide and is clipped — so
+ * `sizes` below describes that width, not the 40vw box. Declare the box and
+ * the browser picks a candidate too small and upscales it.
  */
-// import venue from '../../assets/images/venue-runway-view.jpg';
+import venue from '../../assets/images/meacham-international-airport-conference-center.png';
 ---
 
 <Section id="details" tone="gray" spacing="lg">
@@ -66,9 +70,10 @@ import { details } from '../../data/details';
       >
         <ImageFrame
           fill
-          sizes="(width <= 1023px) 100vw, 40vw"
-          position="50% 50%"
-          brief="Meacham International Airport Conference Center — planes on the apron through the room's floor-to-ceiling windows, or the exterior of the conference center."
+          image={venue}
+          alt="The exterior of Meacham International Airport Conference Center in Fort Worth — a glass and steel building under a blue sky, with a light aircraft overhead."
+          sizes="(width <= 1023px) 100vw, 75vw"
+          position="57% 50%"
         />
       </div>
     </div>
