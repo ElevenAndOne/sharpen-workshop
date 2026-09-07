@@ -1,3 +1,12 @@
+import type { ImageMetadata } from 'astro';
+
+/* Sponsor logos — the normalized plates, not the supplied originals. */
+import reTool from '../assets/images/sponsors/re-tool-logo.png';
+import serenityKnives from '../assets/images/sponsors/serenity-knives-logo.png';
+import shubuCreative from '../assets/images/sponsors/shubu-tagline-midnight-logo.png';
+import supplyClub from '../assets/images/sponsors/supply-club-green-logo.png';
+import teva from '../assets/images/sponsors/teva-full-stacked-logo.png';
+
 export interface Testimonial {
   name: string;
   business: string;
@@ -34,24 +43,46 @@ export const pullQuote = "You can't be a victim and wealthy at the same time.";
 export interface Sponsor {
   name: string;
   href: string;
+  /**
+   * Trimmed to its ink bounds by scripts/normalize-sponsor-logos.mjs, so the
+   * asset's own aspect ratio is the mark's aspect ratio — which is what lets
+   * Sponsors.astro size each logo optically. Never point this at an untrimmed
+   * original; a padded canvas renders as a tiny logo in a big box.
+   */
+  logo: ImageMetadata;
+  /** Optical nudge for a mark that still reads light or heavy. 1 = computed. */
+  scale?: number;
 }
 
 export interface SponsorTier {
   tier: 'Gold' | 'Silver';
+  /**
+   * Rendered height in px for a square logo in this tier; wider marks step
+   * down from it (see Sponsors.astro). Gold sits above Silver because the
+   * tiers are a real hierarchy — $750 vs $300 in the sponsorship package.
+   */
+  base: number;
   sponsors: Sponsor[];
 }
 
 export const sponsorTiers: SponsorTier[] = [
   {
     tier: 'Gold',
+    base: 68,
     sponsors: [
-      { name: 'Serenity Knives', href: 'https://serenityknives.com/' },
-      { name: 'ShuBu Creative', href: 'https://shubucreative.com/' },
-      { name: 'ReTool Marketing', href: 'https://retoolmarketing.com/' },
-      { name: 'TEVA', href: 'https://tevabookkeeping.com/' },
+      { name: 'Serenity Knives', href: 'https://serenityknives.com/', logo: serenityKnives },
+      { name: 'ShuBu Creative', href: 'https://shubucreative.com/', logo: shubuCreative },
+      { name: 'ReTool Marketing', href: 'https://retoolmarketing.com/', logo: reTool },
+      { name: 'TEVA Bookkeeping Solutions', href: 'https://tevabookkeeping.com/', logo: teva },
     ],
   },
-  { tier: 'Silver', sponsors: [{ name: 'Supply Club', href: 'https://mysupplyclub.com/' }] },
+  {
+    tier: 'Silver',
+    base: 56,
+    sponsors: [
+      { name: 'Supply Club', href: 'https://mysupplyclub.com/', logo: supplyClub },
+    ],
+  },
 ];
 
 export const sponsorIntro =

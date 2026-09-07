@@ -1,10 +1,33 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import Section from '../layout/Section.astro';
 import Container from '../layout/Container.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 import Button from '../ui/Button.astro';
 import { sponsorTiers, sponsorIntro } from '../../data/social-proof';
-import { links } from '../../data/site';
+import { event, links } from '../../data/site';
+
+/**
+ * Optical sizing.
+ *
+ * The five supplied marks run from a 1:1 crest (Serenity) to a 4.75:1
+ * wordmark (Supply Club). Give them all the same height and the square one
+ * dominates the wall; match their areas instead and the square one shrinks to
+ * nothing. So height steps down as the mark gets wider, at a tempered
+ * exponent — 0 would be equal heights, 0.5 equal areas.
+ *
+ * This works only because the assets are trimmed to their ink bounds
+ * (scripts/normalize-sponsor-logos.mjs), which makes a file's aspect ratio the
+ * mark's aspect ratio. A new sponsor logo therefore needs no hand-tuning: drop
+ * it in, re-run the script, and it lands at the right weight.
+ */
+const FALLOFF = 0.33;
+
+function plate(logo: ImageMetadata, base: number, scale = 1) {
+  const height = Math.round(base * (logo.height / logo.width) ** FALLOFF * scale);
+  return { height, width: Math.round((height * logo.width) / logo.height) };
+}
 ---
 
 <Section id="sponsor" tone="gray" spacing="lg">
@@ -21,10 +44,17 @@ import { links } from '../../data/site';
           <Button href={links.sponsorEnquiry} variant="primary" stack size="md">
             Become a sponsor
           </Button>
-          <Button href={links.sponsorEnquiry} variant="quiet" stack>
-            Sponsorship package details
+          <Button href={links.sponsorPackage} variant="quiet" stack external>
+            {links.sponsorPackageYear} sponsorship package (PDF)
           </Button>
         </div>
+        {/* The deck the client supplied is last year's, so the year is stated
+            rather than glossed — see the note on links.sponsorPackage. */}
+        <p class="max-w-[42ch] text-small leading-relaxed text-slate-soft">
+          The package lists what each tier includes — website, social and email
+          recognition, a workbook ad, a display table at the event. Tiers and
+          pricing for {event.name} are confirmed on enquiry.
+        </p>
       </div>
 
       <div class="reveal flex flex-col gap-12" data-reveal data-reveal-delay="140">
@@ -33,18 +63,34 @@ import { links } from '../../data/site';
             <div class="flex flex-col gap-5">
               <h3 class="label text-slate">{group.tier}</h3>
               <ul class="grid grid-cols-2 gap-4 portrait:grid-cols-1">
-                {group.sponsors.map((sp) => (
-                  <li class="flex min-h-[5rem] items-center justify-center bg-white px-6 py-5 text-center ring-1 ring-inset ring-line">
-                    <a href={sp.href} target="_blank" rel="noopener noreferrer" class="flex size-full items-center justify-center transition-colors duration-200 hover:text-brand"><span class="font-display text-body font-black tracking-[0.04em] text-ink-deep uppercase">{sp.name}<span class="sr-only"> (opens in a new tab)</span></span></a>
-                  </li>
-                ))}
+                {group.sponsors.map((sp) => {
+                  const size = plate(sp.logo, group.base, sp.scale);
+                  return (
+                    <li>
+                      <a
+                        href={sp.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="card-rule relative flex h-full min-h-[8.5rem] items-center justify-center bg-white px-6 py-6 ring-1 ring-inset ring-line portrait:min-h-[7rem]"
+                      >
+                        <Image
+                          src={sp.logo}
+                          alt={sp.name}
+                          width={size.width}
+                          height={size.height}
+                          densities={[1, 2]}
+                          class="max-w-full object-contain"
+                          style={`width:${size.width}px;height:${size.height}px`}
+                        />
+                        <span class="sr-only">(opens in a new tab)</span>
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))
         }
-        <p class="text-small leading-relaxed text-slate-soft">
-          Sponsor logos to be supplied — name plates stand in for now.
-        </p>
       </div>
     </div>
   </Container>

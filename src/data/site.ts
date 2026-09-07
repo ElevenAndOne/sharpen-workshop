@@ -1,5 +1,12 @@
 /** Single source of truth for event facts, links and navigation. */
 
+/**
+ * The sponsorship package as supplied by the client. Imported rather than
+ * hard-coded so a missing file fails the build instead of shipping a 404,
+ * and so the emitted URL is content-hashed when a new edition replaces it.
+ */
+import sponsorPackagePdf from '../assets/files/sharpen-2026-sponsorship-opportunities-package.pdf?url';
+
 export const event = {
   name: 'SHARPEN 2027',
   edition: '11th Annual',
@@ -46,6 +53,15 @@ export const links = {
   agendaPdf:
     'https://drive.google.com/file/d/1ooP31dJ9afG9drNj2qdD1t9_Fbhfs8Uw/view?usp=sharing',
   sponsorEnquiry: 'mailto:deb@chefdeb.com?subject=SHARPEN%202027%20Sponsorship',
+  /**
+   * NOTE: the supplied deck is the 2026 edition — 10th Annual, Jan. 14-17
+   * 2026 dates, and 2026 tier prices ($2,000 presenting / $750 gold / $300
+   * silver). What a sponsorship *includes* still holds, so it is linked, but
+   * the page labels it by its own year so nobody reads last year's pricing as
+   * this year's. Swap in the 2027 deck and this is the only line to change.
+   */
+  sponsorPackage: sponsorPackagePdf,
+  sponsorPackageYear: '2026',
   home: 'https://chefdeb.com/',
   /**
    * The reel and short listed in the page outline are NOT Chef Deb's content
