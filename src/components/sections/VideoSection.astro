@@ -4,7 +4,7 @@ import Container from '../layout/Container.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 import Button from '../ui/Button.astro';
 import VideoEmbed from '../islands/VideoEmbed';
-import { links, event } from '../../data/site';
+import { links, event, video } from '../../data/site';
 import { getImage } from 'astro:assets';
 import posterSrc from '../../assets/images/deb-client-red-wall-2.jpg';
 import PriceTag from '../islands/PriceTag';
@@ -15,7 +15,8 @@ const regularPrice = tiers.find((t) => t.id === 'regular')!.price;
 const initialEarly = Date.now() < new Date(event.earlyBirdEndsAt).getTime();
 
 
-const poster = await getImage({ src: posterSrc, width: 1000, format: 'webp' });
+/* The slot paints ~780px wide on desktop; 1600 covers that at 2x. */
+const poster = await getImage({ src: posterSrc, width: 1600, format: 'webp' });
 
 const points = [
   ['Fifty owners', 'One room, two full days.'],
@@ -27,7 +28,7 @@ const points = [
 <Section tone="dark" spacing="lg" clip>
   <Container width="wide">
     <div
-      class="grid grid-cols-[1fr_0.62fr] items-center gap-24 tablet:gap-14 landscape:grid-cols-1 landscape:gap-12"
+      class="grid grid-cols-[0.95fr_1.05fr] items-center gap-20 tablet:gap-12 landscape:grid-cols-1 landscape:gap-12"
     >
       <div class="reveal flex flex-col gap-10 landscape:gap-8" data-reveal>
         <SectionHeading tone="light">Here's what you're walking into.</SectionHeading>
@@ -46,8 +47,8 @@ const points = [
         </dl>
 
         <div class="flex flex-wrap items-center gap-4 portrait:flex-col portrait:items-stretch portrait:gap-3">
-          <Button href={links.instagram} variant="outlineLight" size="lg" external stack>
-            Watch on Instagram
+          <Button href={video.url} variant="outlineLight" size="lg" external stack>
+            Watch on YouTube
           </Button>
           <Button href={links.checkout} variant="quiet" class="text-white" external stack>
             Grab your seat —{' '}
@@ -62,24 +63,25 @@ const points = [
         </div>
       </div>
 
-      <div class="reveal mx-auto w-full max-w-[26rem] landscape:max-w-[22rem]" data-reveal data-reveal-delay="140">
-        <!--
-          Neither video in the page outline is Chef Deb's (the YouTube short is a
-          Mel Robbins clip; the reel is from another account), so nothing is
-          embedded. Set youtubeId to the real 60-second cut and the click-to-play
-          facade takes over automatically.
-        -->
+      <div class="reveal w-full" data-reveal data-reveal-delay="140">
+        {/*
+          Click-to-play facade: no request reaches YouTube until someone asks
+          for the video. The still is the brand's own photograph rather than
+          YouTube's title card — see the note on `video` in data/site.ts.
+        */}
         <VideoEmbed
-          youtubeId={null}
-          title="Inside SHARPEN, in 60 seconds"
+          youtubeId={video.youtubeId}
+          title={video.title}
           fallbackHref={links.instagram}
           fallbackLabel="Watch on Instagram"
-          brief="60-second reel from SHARPEN 2026 — coming soon"
+          brief={video.title}
           poster={poster.src}
-          posterPosition="22% 50%"
+          posterPosition="50% 45%"
           client:visible
         />
-        <p class="label mt-4 text-center text-white/45">60-second reel · coming soon</p>
+        <p class="label mt-4 text-white/45">
+          {video.title} · {video.context}
+        </p>
       </div>
     </div>
   </Container>

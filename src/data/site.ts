@@ -64,12 +64,36 @@ export const links = {
   sponsorPackageYear: '2026',
   home: 'https://chefdeb.com/',
   /**
-   * The reel and short listed in the page outline are NOT Chef Deb's content
-   * (the short is a Mel Robbins clip; the reel is from another account), so
-   * neither is linked. Until the real 60-second cut is supplied, the video
-   * block sends people to Chef Deb's Instagram.
+   * Kept as the video band's safety net: if `video.youtubeId` is ever set back
+   * to null, VideoEmbed falls back to sending people here rather than showing
+   * an empty slot. (The reel and short in the original page outline were never
+   * Chef Deb's content — the short is a Mel Robbins clip, the reel is from
+   * another account — so neither was ever embedded.)
    */
   instagram: 'https://www.instagram.com/chefdebcoaching',
+} as const;
+
+/**
+ * The talk the video band plays.
+ *
+ * Worth being precise about what this is: it is NOT SHARPEN footage. It is
+ * Chef Deb delivering her "From Behind the Stove to CEO" masterclass at the
+ * Feed the Soul Foundation's Global Culinary Conference 2025, published on
+ * The Culinary Business Network's channel. That still earns its place in the
+ * band — the section asks "here's what you're walking into", and this is how
+ * she teaches — but the caption credits the conference rather than implying
+ * the clip was shot at the event. Swap in real SHARPEN footage when it exists.
+ *
+ * The poster is deliberately the brand's own photograph, not YouTube's
+ * thumbnail: that thumbnail is a magenta-and-gold title card which would
+ * fight a palette where gold only ever hints.
+ */
+export const video = {
+  youtubeId: 'u9cykTQnNzc',
+  title: 'From Behind the Stove to CEO',
+  /** Credited under the player, so the clip is never passed off as SHARPEN. */
+  context: 'Global Culinary Conference 2025',
+  url: 'https://www.youtube.com/live/u9cykTQnNzc',
 } as const;
 
 /**

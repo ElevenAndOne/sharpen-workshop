@@ -2,9 +2,9 @@ import { useState } from 'react';
 
 interface Props {
   /**
-   * YouTube id. Pass null when no verified SHARPEN footage exists yet — the
-   * component then renders an empty slot instead of an embed, so the page
-   * never shows unrelated footage as if it were the event.
+   * YouTube id. Pass null when no verified footage exists yet — the component
+   * then renders an empty slot instead of an embed, so the page never shows
+   * unrelated footage as if it were the event.
    */
   youtubeId: string | null;
   title: string;
@@ -13,12 +13,20 @@ interface Props {
   fallbackLabel: string;
   /** Art direction for the pending state. */
   brief: string;
-  /** Optional still shown behind the pending state so the slot reads as a
-      video poster rather than an empty box. */
+  /**
+   * Still shown behind the play button. Preferred over YouTube's own
+   * thumbnail: it keeps the facade on-brand and, more importantly, keeps the
+   * promise below — i.ytimg.com is a YouTube domain, so hotlinking a
+   * thumbnail would call YouTube on page load after all.
+   */
   poster?: string;
-  /** CSS object-position for the still. The slot is 9:16 (a reel), so a
-      landscape source needs steering or the crop lands between faces. */
+  /** CSS object-position for the still — a crop this wide needs steering. */
   posterPosition?: string;
+  /**
+   * CSS aspect-ratio for the slot. Defaults to a standard landscape video;
+   * pass '9 / 16' for a phone-shot reel.
+   */
+  ratio?: string;
 }
 
 /**
@@ -34,8 +42,10 @@ export default function VideoEmbed({
   brief,
   poster,
   posterPosition = '50% 50%',
+  ratio = '16 / 9',
 }: Props) {
   const [playing, setPlaying] = useState(false);
+  const box = { aspectRatio: ratio };
 
   /* ---------- no verified asset yet ---------- */
   if (!youtubeId) {
@@ -46,7 +56,8 @@ export default function VideoEmbed({
         rel="noopener noreferrer"
         aria-label={`${fallbackLabel} (opens in a new tab)`}
         title={brief}
-        className="group relative flex aspect-[9/16] w-full items-center justify-center overflow-hidden bg-gray-900"
+        style={box}
+        className="group relative flex w-full items-center justify-center overflow-hidden bg-gray-900"
       >
         {poster && (
           <img
@@ -74,7 +85,7 @@ export default function VideoEmbed({
   /* ---------- verified asset ---------- */
   if (playing) {
     return (
-      <div className="relative aspect-[9/16] w-full overflow-hidden bg-gray-900">
+      <div style={box} className="relative w-full overflow-hidden bg-gray-900">
         <iframe
           src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`}
           title={title}
@@ -91,17 +102,29 @@ export default function VideoEmbed({
       type="button"
       onClick={() => setPlaying(true)}
       aria-label={`Play: ${title}`}
-      className="group relative flex aspect-[9/16] w-full items-center justify-center overflow-hidden bg-gray-900"
+      style={box}
+      className="group relative flex w-full items-center justify-center overflow-hidden bg-gray-900"
     >
       <img
-        src={`https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`}
+        src={poster ?? `https://i.ytimg.com/vi/${youtubeId}/maxresdefault.jpg`}
         alt=""
         loading="lazy"
         decoding="async"
-        className="absolute inset-0 size-full scale-[1.02] object-cover opacity-70 transition-[opacity,transform] duration-700 group-hover:scale-100 group-hover:opacity-80"
+        style={{ objectPosition: posterPosition }}
+        /* No hover scale — the page never scales a photograph on hover. */
+        className="absolute inset-0 size-full object-cover opacity-90 transition-opacity duration-500 group-hover:opacity-100"
       />
-      <span className="relative flex size-16 items-center justify-center rounded-full bg-brand text-white transition-transform duration-300 group-hover:scale-105">
-        <svg viewBox="0 0 24 24" className="ml-0.5 size-6" fill="currentColor" aria-hidden="true">
+      {/* Carries more weight than the pending state's scrim: the button is
+          brand red and the poster has a red wall in it. */}
+      <span
+        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-950/70 via-gray-950/30 to-gray-950/25"
+        aria-hidden="true"
+      />
+      {/* White at rest, brand red on hover — the same move the pending state
+          makes. A red disc would sit on the poster's red wall and half
+          disappear; white reads over every part of the frame. */}
+      <span className="relative flex size-20 items-center justify-center rounded-full bg-white text-ink-deep transition-colors duration-300 group-hover:bg-brand group-hover:text-white portrait:size-16">
+        <svg viewBox="0 0 24 24" className="ml-1 size-7 portrait:size-6" fill="currentColor" aria-hidden="true">
           <path d="M8 5.5v13l11-6.5z" />
         </svg>
       </span>
