@@ -10,6 +10,7 @@ import Section from '../layout/Section.astro';
 import Container from '../layout/Container.astro';
 import Button from '../ui/Button.astro';
 import ImageFrame from '../ui/ImageFrame.astro';
+import SharpenWordmark from '../ui/SharpenWordmark.astro';
 import { event, links } from '../../data/site';
 import room from '../../assets/images/sharpen-room-hands-raised.jpg';
 import PriceTag from '../islands/PriceTag';
@@ -45,11 +46,23 @@ const initialEarly = Date.now() < new Date(event.earlyBirdEndsAt).getTime();
 
   <Container width="wide" class="flex flex-col justify-end pt-44 pb-20 tablet:pt-36 tablet:pb-16 landscape:pt-32 landscape:pb-14 portrait:pt-28 portrait:pb-12">
     <div class="reveal-lines flex max-w-[40rem] flex-col" data-reveal>
-      <h1 class="text-display text-white">
-        <span class="line" style="--i:0"><span class="block">{event.name}</span></span>
+      {/*
+        The client's SHARPEN wordmark carries the first line rather than set
+        type. The mark has no year in it, so the year stays in the accessible
+        name and in the meta line below — the headline and the footnote both
+        still say 2027.
+      */}
+      <h1 class="text-white">
+        <span class="line" style="--i:0">
+          <span class="block max-w-full" style="width:clamp(20rem,32vw,32rem)">
+            <SharpenWordmark label={event.name} />
+          </span>
+        </span>
       </h1>
 
-      <p class="mt-3 text-tagline text-heading text-white">
+      {/* The wordmark is trimmed to its ink, so the gap under it is set here
+          rather than inherited from a line box. */}
+      <p class="mt-4 text-tagline text-heading text-white portrait:mt-5">
         <span class="line" style="--i:1"><span class="block">{event.hero.headline}</span></span>
       </p>
 

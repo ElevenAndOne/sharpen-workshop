@@ -27,16 +27,23 @@ export const event = {
   registrationClosesLabel: 'Jan. 6, 2027',
   registrationClosesAt: '2027-01-06T23:59:00-06:00',
   /**
-   * Hero copy. The headline pair leads; the subhead names the audience; the
-   * paragraph below it matches chefdeb.com/sharpen-2027/ verbatim.
+   * Hero copy. The headline pair leads; the subhead names the audience. The
+   * `lines` below still match chefdeb.com/sharpen-2027/ verbatim; `heading`
+   * and `body` no longer do — see the note on them.
    */
   hero: {
     /* Non-breaking space keeps the wrap on the sentence break, not after "A". */
     headline: 'Two days. A\u00A0different 2027.',
     subhead:
       "The must-attend event for Food, Beverage & Hospitality leaders shaping what's next",
-    heading: "SHARPEN isn't another conference that talks at you.",
-    body: "It's two days of working on your business instead of in it, next to owners who understand exactly what you're carrying.",
+    /* Client note, Sept 2026: "all business owners want to know is how much
+       money will it make me and how fast." So the lead claim is now the
+       Power of One thesis — the money is in price, cost and volume, which the
+       owner already controls — and the answer to "how fast" is the 90-day
+       plan they leave with. No earnings figure is promised, because none was
+       supplied; what is promised is that they run their own numbers. */
+    heading: 'The fastest money in your business is already in your numbers.',
+    body: "Two days on the three levers that move it — price, cost, volume — run against your own figures, and a 90-day plan to go get it.",
     lines: [
       'Fifty seats. No fluff. Nobody selling you a course from the stage.',
       "Because there is no ONE plan for ALL food, beverage and hospitality businesses — you'll leave with yours, written down and prioritized for 2027.",

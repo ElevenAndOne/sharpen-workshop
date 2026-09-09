@@ -1,0 +1,32 @@
+---
+/**
+ * SHARPEN wordmark — the client's own logo (SHARPEN Logo.ai), converted to
+ * paths and stripped to `currentColor` so one file serves every context.
+ *
+ * The supplied art is red (#C83935); painting it with `currentColor` instead
+ * of baking that in means the mark can sit white over the hero photograph and
+ * red on a light ground without a second export. Pass `class="text-brand"` for
+ * the brand-red rendering.
+ *
+ * The viewBox is trimmed to the mark's ink bounds — measured off a 300dpi
+ * render of the .ai rather than taken from its artboard, which carried
+ * asymmetric padding — so the mark's aspect ratio is the file's aspect ratio
+ * and sizing it by width or height both behave.
+ */
+import Mark from '../../assets/brand/sharpen-wordmark.svg';
+
+interface Props {
+  class?: string;
+  /** Falls back to a decorative mark when the name is carried elsewhere. */
+  label?: string | null;
+}
+
+const { class: className, label = 'SHARPEN' } = Astro.props;
+---
+
+<Mark
+  class:list={['block h-auto w-full', className]}
+  {...label
+    ? { role: 'img', 'aria-label': label }
+    : { 'aria-hidden': 'true', focusable: 'false' }}
+/>
