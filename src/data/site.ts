@@ -42,9 +42,10 @@ export const event = {
       "Because there is no ONE plan for ALL food, beverage and hospitality businesses — you'll leave with yours, written down and prioritized for 2027.",
     ],
   },
-  /** Early Bird window. */
+  /** Early Bird window. Regular opens the morning after it closes. */
   earlyBirdEndsLabel: 'Nov. 30',
   earlyBirdEndsAt: '2026-11-30T23:59:00-06:00',
+  regularOpensLabel: 'Dec. 1, 2026',
 } as const;
 
 export const links = {
@@ -98,17 +99,6 @@ export const video = {
   context: 'Global Culinary Conference 2025',
   url: 'https://www.youtube.com/live/u9cykTQnNzc',
 } as const;
-
-/**
- * Build a Thrivecart URL with a coupon pre-applied so the code the page
- * advertises is already in the cart when the buyer lands.
- */
-export function checkoutUrl(coupon?: string): string {
-  if (!coupon) return links.checkout;
-  const url = new URL(links.checkout);
-  url.searchParams.set('coupon', coupon);
-  return url.toString();
-}
 
 export const nav = [
   { label: 'The Details', href: '#details' },
