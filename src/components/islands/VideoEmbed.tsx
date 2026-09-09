@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface Props {
   /**
-   * YouTube id. Pass null when no verified footage exists yet — the component
-   * then renders an empty slot instead of an embed, so the page never shows
-   * unrelated footage as if it were the event.
+   * Self-hosted MP4. Pass null when no verified footage exists yet — the
+   * component then renders an empty slot instead of a player, so the page
+   * never shows unrelated footage as if it were the event.
    */
-  youtubeId: string | null;
+  src: string | null;
   title: string;
   /** Where to send people in the meantime. */
   fallbackHref: string;
@@ -14,10 +14,9 @@ interface Props {
   /** Art direction for the pending state. */
   brief: string;
   /**
-   * Still shown behind the play button. Preferred over YouTube's own
-   * thumbnail: it keeps the facade on-brand and, more importantly, keeps the
-   * promise below — i.ytimg.com is a YouTube domain, so hotlinking a
-   * thumbnail would call YouTube on page load after all.
+   * Still shown behind the play button. Also handed to the <video> element as
+   * its poster so the first painted frame is this exact image rather than a
+   * flash of black while the file opens.
    */
   poster?: string;
   /** CSS object-position for the still — a crop this wide needs steering. */
@@ -30,12 +29,14 @@ interface Props {
 }
 
 /**
- * Click-to-load YouTube facade. Nothing from youtube.com is requested until
- * the visitor actually asks for the video, which keeps the page fast and
- * avoids third-party cookies on first load.
+ * Click-to-play, self-hosted. The file is 36MB, so `preload="none"` on the
+ * facade means a visitor who never presses play never pays for it — the same
+ * bargain the old YouTube facade made, minus the third party. Pressing play
+ * mounts the <video> with `autoPlay`, which is allowed because the press is
+ * the user gesture that permits it.
  */
 export default function VideoEmbed({
-  youtubeId,
+  src,
   title,
   fallbackHref,
   fallbackLabel,
@@ -45,10 +46,11 @@ export default function VideoEmbed({
   ratio = '16 / 9',
 }: Props) {
   const [playing, setPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const box = { aspectRatio: ratio };
 
   /* ---------- no verified asset yet ---------- */
-  if (!youtubeId) {
+  if (!src) {
     return (
       <a
         href={fallbackHref}
@@ -86,12 +88,16 @@ export default function VideoEmbed({
   if (playing) {
     return (
       <div style={box} className="relative w-full overflow-hidden bg-gray-900">
-        <iframe
-          src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`}
+        <video
+          ref={videoRef}
+          src={src}
+          poster={poster}
           title={title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 size-full border-0"
+          controls
+          autoPlay
+          playsInline
+          preload="auto"
+          className="absolute inset-0 size-full bg-gray-900 object-cover"
         />
       </div>
     );
@@ -106,7 +112,7 @@ export default function VideoEmbed({
       className="group relative flex w-full items-center justify-center overflow-hidden bg-gray-900"
     >
       <img
-        src={poster ?? `https://i.ytimg.com/vi/${youtubeId}/maxresdefault.jpg`}
+        src={poster}
         alt=""
         loading="lazy"
         decoding="async"
@@ -114,15 +120,13 @@ export default function VideoEmbed({
         /* No hover scale — the page never scales a photograph on hover. */
         className="absolute inset-0 size-full object-cover opacity-90 transition-opacity duration-500 group-hover:opacity-100"
       />
-      {/* Carries more weight than the pending state's scrim: the button is
-          brand red and the poster has a red wall in it. */}
       <span
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-950/70 via-gray-950/30 to-gray-950/25"
         aria-hidden="true"
       />
-      {/* White at rest, brand red on hover — the same move the pending state
-          makes. A red disc would sit on the poster's red wall and half
-          disappear; white reads over every part of the frame. */}
+      {/* White at rest, brand red on hover. A red disc would sit on the red
+          lanyards running through this frame and half disappear; white reads
+          over every part of it. */}
       <span className="relative flex size-20 items-center justify-center rounded-full bg-white text-ink-deep transition-colors duration-300 group-hover:bg-brand group-hover:text-white portrait:size-16">
         <svg viewBox="0 0 24 24" className="ml-1 size-7 portrait:size-6" fill="currentColor" aria-hidden="true">
           <path d="M8 5.5v13l11-6.5z" />

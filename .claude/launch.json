@@ -3,10 +3,8 @@
   "configurations": [
     {
       "name": "sharpen-dev",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 4321,
-      "autoPort": true
+      "url": "http://localhost:4322",
+      "port": 4322
     }
   ]
 }

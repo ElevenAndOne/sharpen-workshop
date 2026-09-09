@@ -32,12 +32,13 @@ import { links } from '../../data/site';
       <p class="text-body text-slate">No email required.</p>
     </div>
 
-    <!-- Optional add-ons -->
+    <!-- Optional events -->
     <div class="mt-16 border-t border-line pt-8">
-      <h3 class="label text-slate">Optional add-ons</h3>
-      <ul
-        class="mt-7 grid grid-cols-4 gap-x-8 gap-y-8 tablet:grid-cols-2 portrait:grid-cols-1 portrait:gap-y-6"
-      >
+      <h3 class="label text-slate">Optional events</h3>
+      <p class="mt-3 text-body text-slate">Not included in your ticket. RSVP required.</p>
+      {/* Wraps at content width rather than filling a fixed grid, so the list
+          reads the same whether it holds two entries or six. */}
+      <ul class="mt-7 flex flex-wrap gap-x-16 gap-y-8 portrait:flex-col portrait:gap-y-6">
         {
           addOns.map((item) => (
             <li class="flex flex-col gap-1.5">

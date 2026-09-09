@@ -25,9 +25,12 @@ export const details: DetailBlock[] = [
   {
     index: '03',
     label: 'Ticket includes',
+    /* No breakfast is served — coffee, tea and snacks run all day, lunch is
+       provided. Wording follows the client's updated agenda PDF. */
     lines: [
       'Both full days',
-      'Breakfast and lunch daily',
+      'Lunch daily',
+      'Coffee, tea and snacks daily',
       'All worksheets and materials',
       'Your 2027 One-Page Strategic Plan',
     ],
@@ -36,7 +39,7 @@ export const details: DetailBlock[] = [
     index: '04',
     label: 'Please note',
     lines: [
-      'Built for established owners — 1+ year in business, $50K+ gross revenue.',
+      'Built for established owners — 1+ year in business.',
       `Limited to ${event.seats} attendees.`,
     ],
   },

@@ -6,12 +6,15 @@ export interface Tier {
   badge?: string;
   priceWas?: number;
   price: number;
-  code?: string;
-  /** Publicly advertised codes only. Internal codes stay out of the build. */
+  /** Per-tier checkout URL; falls back to the shared one when absent. */
+  href?: string;
+  /** Not sellable until Early Bird closes — the card renders locked. */
+  opensAfterEarlyBird?: boolean;
+  /** Shown in place of the CTA while the tier is locked. */
+  opensLabel?: string;
   window: string;
   cta: string;
   featured: boolean;
-  fine?: string;
 }
 
 export const tiers: Tier[] = [
@@ -21,16 +24,16 @@ export const tiers: Tier[] = [
     badge: 'Save $100',
     priceWas: 495,
     price: 395,
-    code: 'EARLYBIRD',
     window: `Through ${event.earlyBirdEndsLabel}`,
     cta: 'Claim Early Bird — $395',
     featured: true,
-    fine: 'Code applied automatically at checkout.',
   },
   {
     id: 'regular',
     name: 'Regular',
     price: 495,
+    opensAfterEarlyBird: true,
+    opensLabel: `Opens ${event.regularOpensLabel}`,
     window: `Registration closes ${event.registrationClosesLabel}`,
     cta: 'Register — $495',
     featured: false,
