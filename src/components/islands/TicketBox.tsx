@@ -158,14 +158,29 @@ export default function TicketBox({
       {/* ---- the clock ---- */}
       <Countdown to={clockTarget} label={clockLabel} tone="dark" />
 
-      {/* ---- two facts that help people act ---- */}
-      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-line pt-8 text-body text-ink portrait:flex-col portrait:gap-y-2">
-        <p className="flex items-center gap-2.5">
-          <span className="size-1.5 rotate-45 bg-brand" aria-hidden="true" />
-          Limited to {seats} attendees
+      {/* ---- scarcity ----
+           The closing argument of the section, so it is the one line here set
+           at display size — bigger than "Get your tickets" above it, which is
+           only a label. The break is forced at the period rather than left to
+           the wrapper, so the two sentences stay two beats the way the hero's
+           headline pair does. "50 seats" is the only red text on this grey
+           ground: red is already the page's accent, so the number is marked
+           without inventing a highlight treatment for it.
+
+           Portrait drops back to heading size, because the page's convention
+           for display type is one whole sentence per line and "When they're
+           gone, they're gone." is too long to hold that in a 375px column —
+           at 41.6px it strands a two-word fragment on a line of its own. At
+           heading size the comma break falls where it should. */}
+      <div className="flex w-full flex-col items-center">
+        <p className="text-center font-display text-display font-black tracking-[-0.02em] text-ink-deep portrait:text-heading">
+          <span className="block">
+            Only <span className="text-brand">{seats} seats</span>.
+          </span>
+          <span className="block">When they&rsquo;re gone, they&rsquo;re gone.</span>
         </p>
-        <span className="size-1.5 rotate-45 bg-gold portrait:hidden" aria-hidden="true" />
-        <p className="flex items-center gap-2.5">
+
+        <p className="mt-9 flex flex-wrap items-center justify-center gap-2.5 text-body text-slate portrait:mt-7">
           Bringing someone? Second ticket half off with code
           <span className="label inline-flex items-center bg-gold px-2 py-1 text-gray-900">{colleagueCode}</span>
         </p>
