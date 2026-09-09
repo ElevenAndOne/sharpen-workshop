@@ -5,8 +5,7 @@ import SectionHeading from '../ui/SectionHeading.astro';
 import Button from '../ui/Button.astro';
 import VideoEmbed from '../islands/VideoEmbed';
 import { links, event, video } from '../../data/site';
-import { getImage } from 'astro:assets';
-import posterSrc from '../../assets/images/sharpen-2026-video-poster.jpg';
+import posterSrc from '../../assets/images/sharpen-2026-video-poster.avif';
 import PriceTag from '../islands/PriceTag';
 import { tiers } from '../../data/tickets';
 
@@ -15,8 +14,11 @@ const regularPrice = tiers.find((t) => t.id === 'regular')!.price;
 const initialEarly = Date.now() < new Date(event.earlyBirdEndsAt).getTime();
 
 
-/* The slot paints ~780px wide on desktop; 1600 covers that at 2x. */
-const poster = await getImage({ src: posterSrc, width: 1600, format: 'webp' });
+/* Shipped as-is rather than through getImage. The asset is already AVIF at
+   exactly the width this slot needs — 1600 covers the ~780px paint at 2x — so
+   re-encoding it here would only spend a second lossy pass on an image that is
+   already at its delivery size. Astro still content-hashes the emitted file. */
+const poster = posterSrc;
 
 const points = [
   ['Fifty owners', 'One room, two full days.'],
@@ -74,7 +76,7 @@ const points = [
           fallbackLabel="Watch on Instagram"
           brief={video.title}
           poster={poster.src}
-          posterPosition="50% 42%"
+          posterPosition="50% 50%"
           client:visible
         />
         <p class="label mt-4 text-white/45">
