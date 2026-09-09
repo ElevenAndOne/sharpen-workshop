@@ -253,9 +253,9 @@ export default function SiteNav({
               href={checkoutHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-[2px] bg-brand px-5 py-3 font-display label text-white transition-colors duration-200 hover:bg-brand-deep portrait:px-4 portrait:py-2.5 portrait:text-small"
+              className="inline-flex items-center gap-2 rounded-[2px] bg-brand px-5 py-3 font-display label whitespace-nowrap text-white transition-colors duration-200 hover:bg-brand-deep portrait:px-4 portrait:py-2.5 portrait:text-small"
             >
-              Grab your seat
+              Reserve your spot
               <span className="text-white/70 portrait:hidden">{price}</span>
             </a>
 
@@ -345,7 +345,7 @@ export default function SiteNav({
               onClick={close}
               className="flex w-full items-center justify-center gap-2 rounded-[2px] bg-brand px-6 py-4.5 font-display text-body font-black tracking-[0.09em] text-white uppercase"
             >
-              Grab your seat — {price}
+              Reserve your spot — {price}
             </a>
             <p className="mt-4 text-center label text-white/45">
               50 seats · Jan. 28–29, 2027 · Fort Worth
