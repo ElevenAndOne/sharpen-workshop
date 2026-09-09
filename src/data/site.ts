@@ -50,8 +50,11 @@ export const event = {
 export const links = {
   /** Priority #1 from the brief — every ticket CTA lands here. */
   checkout: 'https://chefdeb.thrivecart.com/sharpen-workshop-2025/',
+  /* The client's updated agenda deck (Sept 2026) — the one that carries the
+     revised "your ticket includes", no $50K criterion, Optional Events, and
+     the non-refundable policy. Shared publicly on Drive. */
   agendaPdf:
-    'https://drive.google.com/file/d/1ooP31dJ9afG9drNj2qdD1t9_Fbhfs8Uw/view?usp=sharing',
+    'https://drive.google.com/file/d/1YItEtKb-y9N2lKbz2bvGO5CoNjL_akZ_/view?usp=sharing',
   sponsorEnquiry: 'mailto:deb@chefdeb.com?subject=SHARPEN%202027%20Sponsorship',
   /**
    * NOTE: the supplied deck is the 2026 edition — 10th Annual, Jan. 14-17
@@ -116,14 +119,30 @@ export const nav = [
   { label: 'FAQ', href: '#faq' },
 ] as const;
 
-export const contacts = [
+export interface Contact {
+  name: string;
+  role?: string;
+  email: string;
+  phone: string;
+  phoneHref: string;
+}
+
+/** Bianca runs registration and is the first line for attendee questions. */
+export const contacts: Contact[] = [
+  {
+    name: 'Bianca Russano',
+    role: 'Client & Event Manager & Culinary Coach',
+    email: 'bianca@chefdeb.com',
+    phone: '973.879.4557',
+    phoneHref: 'tel:+19738794557',
+  },
   {
     name: 'Chef Deb',
     email: 'deb@chefdeb.com',
     phone: '512-879-7751',
     phoneHref: 'tel:+15128797751',
   },
-] as const;
+];
 
 /** Verified against the links in chefdeb.com's own header. */
 export const social = [

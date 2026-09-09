@@ -21,6 +21,7 @@ import { contacts } from '../../data/site';
             contacts.map((c) => (
               <div class="flex flex-col gap-1">
                 <span class="font-display text-body font-black text-ink-deep">{c.name}</span>
+                {c.role && <span class="text-small text-slate-soft">{c.role}</span>}
                 <a
                   href={`mailto:${c.email}`}
                   class="w-fit text-body text-brand underline decoration-2 underline-offset-4 hover:decoration-brand-deep"

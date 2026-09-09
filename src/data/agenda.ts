@@ -80,9 +80,8 @@ export interface AddOn {
   note?: string;
 }
 
+/** Not included in the workshop ticket. RSVP required. */
 export const addOns: AddOn[] = [
-  { day: 'Wed. Jan. 27', time: '1:00 pm', title: 'Savor Culinary Services kitchen tour' },
-  { day: 'Wed. Jan. 27', time: '4:00 – 6:00 pm', title: 'In-flight round table on aircraft' },
   { day: 'Wed. Jan. 27', time: '6:00 pm', title: 'Welcome dinner, location TBD', note: 'Additional cost, RSVP' },
   { day: 'Sat. Jan. 30', time: 'All day', title: 'Mastermind Day', note: 'Coaching clients only' },
 ];

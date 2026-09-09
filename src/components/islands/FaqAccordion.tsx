@@ -3,7 +3,6 @@ import { useState } from 'react';
 export interface FaqData {
   q: string;
   a: string;
-  pending?: boolean;
 }
 
 interface Props {
@@ -60,11 +59,6 @@ export default function FaqAccordion({ items }: Props) {
               <div>
                 <div className="pr-10 pb-7 pl-[3.1rem] portrait:pr-0 portrait:pl-0">
                   <p className="max-w-[62ch] text-body text-slate">{item.a}</p>
-                  {item.pending && (
-                    <p className="label mt-3 inline-flex items-center bg-gold-tint px-3 py-1.5 text-gold-deep">
-                      Awaiting client sign-off
-                    </p>
-                  )}
                 </div>
               </div>
             </div>
