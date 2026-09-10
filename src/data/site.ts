@@ -35,7 +35,7 @@ export const event = {
     /* Non-breaking space keeps the wrap on the sentence break, not after "A". */
     headline: 'Two days. A\u00A0different 2027.',
     subhead:
-      "The must-attend event for Food, Beverage & Hospitality leaders shaping what's next",
+      "The must attend event for Food, Beverage & Hospitality leaders shaping what's next.",
     /* Client note, Sept 2026: "all business owners want to know is how much
        money will it make me and how fast." So the lead claim is now the
        Power of One thesis — the money is in price, cost and volume, which the
@@ -58,12 +58,14 @@ export const event = {
 export const links = {
   /** Priority #1 from the brief — every ticket CTA lands here. */
   checkout: 'https://chefdeb.thrivecart.com/sharpen-workshop-2025/',
-  /* The client's updated agenda deck (Sept 2026) — the one that carries the
-     revised "your ticket includes", no $50K criterion, Optional Events, and
-     the non-refundable policy. Shared publicly on Drive. */
+  /* The client's updated agenda deck, supplied 9 Sept 2026 and swapped in at
+     their request. Carries the revised "your ticket includes", no $50K
+     criterion, Optional Events, and the non-refundable policy. Shared
+     publicly on Drive. */
   agendaPdf:
-    'https://drive.google.com/file/d/1YItEtKb-y9N2lKbz2bvGO5CoNjL_akZ_/view?usp=sharing',
-  sponsorEnquiry: 'mailto:deb@chefdeb.com?subject=SHARPEN%202027%20Sponsorship',
+    'https://drive.google.com/file/d/1_TIRUhsZbS4l12Q3xpz-sPUZz_J2KP7s/view?usp=sharing',
+  sponsorEnquiry:
+    'mailto:bianca@chefdeb.com?subject=Sharpen%202027%20Sponsorship%20Inquiry',
   /**
    * NOTE: the supplied deck is the 2026 edition — 10th Annual, Jan. 14-17
    * 2026 dates, and 2026 tier prices ($2,000 presenting / $750 gold / $300
@@ -127,7 +129,11 @@ export interface Contact {
   phoneHref: string;
 }
 
-/** Bianca runs registration and is the first line for attendee questions. */
+/**
+ * Bianca runs registration and is the first line for attendee questions.
+ * Chef Deb's own email and phone came off at the client's request (Sept 2026),
+ * so Bianca is the only contact the page publishes.
+ */
 export const contacts: Contact[] = [
   {
     name: 'Bianca Russano',
@@ -135,12 +141,6 @@ export const contacts: Contact[] = [
     email: 'bianca@chefdeb.com',
     phone: '973.879.4557',
     phoneHref: 'tel:+19738794557',
-  },
-  {
-    name: 'Chef Deb',
-    email: 'deb@chefdeb.com',
-    phone: '512-879-7751',
-    phoneHref: 'tel:+15128797751',
   },
 ];
 
