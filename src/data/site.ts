@@ -7,6 +7,15 @@
  */
 import sponsorPackagePdf from '../assets/files/sharpen-2026-sponsorship-opportunities-package.pdf?url';
 
+/**
+ * The 2027 agenda deck, supplied by the client. Served from our own build
+ * rather than the Drive link it arrived on: a Drive URL shows a sign-in
+ * wall to anyone not logged into Google, can be revoked or moved without
+ * us knowing, and interrupts the page with a third-party viewer. Imported
+ * so a missing file fails the build and the URL is content-hashed.
+ */
+import agendaPdf from '../assets/files/sharpen-2027-agenda.pdf?url';
+
 export const event = {
   name: 'SHARPEN 2027',
   edition: '11th Annual',
@@ -58,12 +67,11 @@ export const event = {
 export const links = {
   /** Priority #1 from the brief — every ticket CTA lands here. */
   checkout: 'https://chefdeb.thrivecart.com/sharpen-workshop-2025/',
-  /* The client's updated agenda deck, supplied 9 Sept 2026 and swapped in at
-     their request. Carries the revised "your ticket includes", no $50K
-     criterion, Optional Events, and the non-refundable policy. Shared
-     publicly on Drive. */
-  agendaPdf:
-    'https://drive.google.com/file/d/1_TIRUhsZbS4l12Q3xpz-sPUZz_J2KP7s/view?usp=sharing',
+  /* Four pages: the overview and pricing, both days, then Optional Events
+     with the travel, stay, non-refundable policy and Bianca's details. Its
+     prices match the tiers below, and its only contact is Bianca — so it
+     agrees with the page on both counts. */
+  agendaPdf,
   sponsorEnquiry:
     'mailto:bianca@chefdeb.com?subject=Sharpen%202027%20Sponsorship%20Inquiry',
   /**
