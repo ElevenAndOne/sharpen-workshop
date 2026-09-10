@@ -1,35 +1,61 @@
 ---
 /**
- * Inside the room — three photographs, equal frames, edge to edge, no copy.
+ * Inside the room — one continuous band of photographs, edge to edge, no copy.
  * The imagery is the argument.
+ *
+ * Client selection, Sept 2026. The band replaced a fixed three-up grid so the
+ * whole set gets seen rather than just the first three, and every frame is
+ * pre-cropped to 3:2 around its subject — so the markup needs no
+ * `object-position` tuning and the crop is identical at every breakpoint.
+ *
+ * The loop mechanics live in the `photo-marquee` utilities in global.css.
  */
 import Section from '../layout/Section.astro';
 import ImageFrame from '../ui/ImageFrame.astro';
-import flipchart from '../../assets/images/deb-flipchart.jpg';
-import worksheet from '../../assets/images/worksheet-closeup.jpg';
-import table from '../../assets/images/deb-coaching-table.jpg';
+import speaking from '../../assets/images/owner-speaking.jpg';
+import backdrop from '../../assets/images/owners-photo-backdrop.jpg';
+import flipchart from '../../assets/images/deb-at-flipchart.jpg';
+import badges from '../../assets/images/owners-with-badges.jpg';
+import lunch from '../../assets/images/owners-at-lunch.jpg';
 
 const frames = [
-  { image: flipchart, alt: 'Chef Deb standing at a flip chart in front of a room of owners.', position: '58% 40%' },
-  { image: worksheet, alt: 'An owner filling in a SHARPEN worksheet by hand, laptop open beside her.', position: '50% 50%' },
-  { image: table, alt: 'Chef Deb and an owner laughing over notes and coffee at a small table.', position: '40% 50%' },
+  { image: speaking, alt: 'An owner on her feet mid-point, clicker in hand, talking to the room.' },
+  { image: backdrop, alt: 'Four attendees posing with props at the SHARPEN backdrop.' },
+  { image: flipchart, alt: 'Chef Deb presenting beside a flip chart, headset mic on.' },
+  { image: badges, alt: 'Four owners arm in arm, holding up their SHARPEN name badges.' },
+  { image: lunch, alt: 'Three owners with plates and coffee at the lunch break.' },
+];
+
+/*
+ * Two identical runs — the loop needs the second to slide in behind the
+ * first. It carries the same pictures, so it is hidden from assistive tech
+ * and its frames go out with an empty alt rather than reading twice.
+ */
+const runs = [
+  { key: 'lead', decorative: false },
+  { key: 'loop', decorative: true },
 ];
 ---
 
 <Section tone="white" spacing="none" clip>
-  <div class="grid grid-cols-3 gap-1 portrait:grid-cols-1">
-    {
-      frames.map((f, i) => (
-        <div class="reveal-clip relative aspect-[4/5] portrait:aspect-[4/3]" data-reveal style={`--i:${i}`}>
-          <ImageFrame
-            fill
-            image={f.image}
-            alt={f.alt}
-            sizes="(width <= 767px) 100vw, 34vw"
-            position={f.position}
-          />
-        </div>
-      ))
-    }
+  <div class="photo-marquee reveal-clip" data-reveal>
+    <div class="photo-marquee-track">
+      {
+        runs.map((run) =>
+          frames.map((f) => (
+            <div class="photo-marquee-item" aria-hidden={run.decorative ? 'true' : undefined}>
+              <ImageFrame
+                fill
+                eager
+                image={f.image}
+                alt={run.decorative ? '' : f.alt}
+                widths={[480, 640, 960, 1280]}
+                sizes="(width <= 767px) 70vw, 34vw"
+              />
+            </div>
+          ))
+        )
+      }
+    </div>
   </div>
 </Section>

@@ -303,6 +303,60 @@
   }
 }
 
+/* ==========================================================================
+   Photo marquee — one continuous band of photographs, drifting left forever.
+   Namespaced `photo-marquee-*` because AnnouncementBar already owns the bare
+   `.marquee` / `.marquee-track` names, script hook included.
+
+   The track holds the same run of frames TWICE and translates by exactly
+   -50%. At the end of the cycle run two sits precisely where run one began,
+   so the reset is invisible and the loop has no seam.
+
+   The gutter is each item's `margin-inline-end`, NOT a flex `gap`. A flex gap
+   would add one extra gutter between the two runs, making the track wider
+   than 2x a run, and -50% would then stop half a gutter short of the loop
+   point — the seam would visibly jump every cycle.
+
+   Under reduced motion the drift stops and the band becomes an ordinary
+   horizontal scroller, so every photograph is still reachable.
+   ========================================================================== */
+@keyframes photo-marquee-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+@utility photo-marquee {
+  --photo-marquee-gap: 4px;
+  /* ~3 frames on any desktop width; ~1.4 on a phone, where 34vw floors out. */
+  --photo-marquee-frame: clamp(260px, 34vw, 620px);
+  overflow: hidden;
+  @media (prefers-reduced-motion: reduce) {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+}
+
+@utility photo-marquee-track {
+  display: flex;
+  width: max-content;
+  @media (prefers-reduced-motion: no-preference) {
+    animation: photo-marquee-drift var(--photo-marquee-duration, 60s) linear infinite;
+  }
+  /* The second run is a duplicate; without the drift it is just noise. */
+  @media (prefers-reduced-motion: reduce) {
+    & > [aria-hidden="true"] { display: none; }
+  }
+}
+
+@utility photo-marquee-item {
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--photo-marquee-frame);
+  aspect-ratio: 3 / 2;
+  margin-inline-end: var(--photo-marquee-gap);
+  @media (prefers-reduced-motion: reduce) { scroll-snap-align: center; }
+}
+
 /* Accordion body: grid rows 0fr -> 1fr, no height measurement. */
 @utility accordion-body {
   display: grid;

@@ -25,6 +25,13 @@ interface Props {
   position?: string;
   /** Above-the-fold image: eager + high fetch priority. */
   priority?: boolean;
+  /**
+   * Load immediately without claiming priority. For images the viewport can
+   * reveal without a scroll — a marquee frame drifting in from off-canvas —
+   * where `loading="lazy"` may never re-trigger, since the browser only
+   * re-evaluates it on scroll and a CSS transform is not one.
+   */
+  eager?: boolean;
   /** Art direction shown on the placeholder. */
   brief?: string;
   tone?: 'light' | 'dark';
@@ -40,6 +47,7 @@ const {
   widths = [640, 960, 1280, 1600, 2000, 2560],
   position = '50% 50%',
   priority = false,
+  eager = false,
   brief = 'Photography to be supplied',
   tone = 'light',
   class: className,
@@ -58,7 +66,7 @@ const usable = image ? widths.filter((w) => w <= image.width) : [];
       formats={['avif', 'webp']}
       widths={usable.length ? usable : [image.width]}
       sizes={sizes}
-      loading={priority ? 'eager' : 'lazy'}
+      loading={priority || eager ? 'eager' : 'lazy'}
       fetchpriority={priority ? 'high' : undefined}
       decoding={priority ? 'sync' : 'async'}
       pictureAttributes={{ class: `${box} ${className ?? ''}`.trim(), style: ratioStyle }}
