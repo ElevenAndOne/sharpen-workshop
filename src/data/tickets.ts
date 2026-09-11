@@ -6,7 +6,15 @@ export interface Tier {
   badge?: string;
   priceWas?: number;
   price: number;
-  /** Per-tier checkout URL; falls back to the shared one when absent. */
+  /**
+   * Per-tier checkout URL; falls back to the shared one when absent.
+   *
+   * Both tiers now carry their own GoHighLevel payment link, which is what
+   * makes the Dec. 1 switchover safe here: TicketBox is a client island, so it
+   * picks the tier for the visitor's own date and sends them to that tier's
+   * link. The shared `links.checkout` cannot do that — see the note on it in
+   * site.ts.
+   */
   href?: string;
   /** Not sellable until Early Bird closes — the card renders locked. */
   opensAfterEarlyBird?: boolean;
@@ -24,6 +32,7 @@ export const tiers: Tier[] = [
     badge: 'Save $100',
     priceWas: 495,
     price: 395,
+    href: 'https://link.fastpaydirect.com/payment-link/6aa40b69e9a073174b3b5cbc',
     window: `Through ${event.earlyBirdEndsLabel}`,
     cta: 'Claim Early Bird — $395',
     featured: true,
@@ -32,6 +41,7 @@ export const tiers: Tier[] = [
     id: 'regular',
     name: 'Regular',
     price: 495,
+    href: 'https://link.fastpaydirect.com/payment-link/6aa40cbce9a073174b3b5cbf',
     opensAfterEarlyBird: true,
     opensLabel: `Opens ${event.regularOpensLabel}`,
     window: `Registration closes ${event.registrationClosesLabel}`,
