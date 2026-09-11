@@ -47,6 +47,22 @@ Every section is `<Section><Container>…</Container></Section>`. Anything decor
 - Refund policy copy (`src/data/faq.ts`, flagged `pending`)
 - Sponsor logo files (name plates stand in)
 - 2026 room photography (the hero uses a 2024 SHARPEN photo carrying a photographer credit — confirm rights)
+- **DNS.** `sharpen.chefdeb.com` does not resolve — Cloudflare, which is authoritative for `chefdeb.com`, returns NXDOMAIN for the name, so no record exists in the zone yet.
+- **What happens to `chefdeb.com/sharpen-2027/`.** That WordPress page is live and carries the same content. Once this build is published, two URLs will compete for the same searches. Whoever owns the decision needs to pick one: either retire the WordPress page and 301 it here, or leave it as the primary and have this page canonicalise to it. Until that is settled this page self-canonicalises, which is the right default for the page that is going live but is not a substitute for the decision.
+
+## SEO and share metadata
+
+`src/layouts/Layout.astro` holds the head: title and description (kept to ~60 and ~155 characters so neither is truncated in results), the full Open Graph and Twitter set, and one JSON-LD `@graph` linking Organization → WebSite → WebPage → BusinessEvent → FAQPage by `@id`. The FAQ nodes are generated from `src/data/faq.ts`, so answers cannot drift from what the page renders.
+
+Three generated endpoints sit alongside it: `robots.txt` (answer-engine crawlers explicitly allowed — see the note in that file), `sitemap.xml`, and `llms.txt`, a Markdown brief of the event built from the same data layer.
+
+Icons and the share card are generated, not hand-drawn:
+
+```sh
+node scripts/generate-brand-assets.mjs
+```
+
+The icon glyph is the knife-"A" lifted out of the client's own SHARPEN wordmark; the share card reuses the hero's photograph and composition. Re-run after changing either. The script downloads the Mulish variable TTF into `node_modules/.cache` on first run, because librsvg cannot read the woff2 the site ships.
 
 ## Checkout
 All ticket CTAs go to the Thrivecart page at `https://chefdeb.thrivecart.com/sharpen-workshop-2025/` (the slug is legacy but correct). Coupon codes are passed as `?coupon=CODE`. Only the two public codes appear in this repository.
