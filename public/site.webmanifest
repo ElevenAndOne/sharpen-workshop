@@ -1,0 +1,14 @@
+{
+  "name": "SHARPEN 2027 — Chef Deb Coaching",
+  "short_name": "SHARPEN 2027",
+  "description": "Two days on price, cost and volume for food, beverage and hospitality business owners. Jan. 28–29, 2027, Fort Worth, Texas.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#161616",
+  "theme_color": "#161616",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
