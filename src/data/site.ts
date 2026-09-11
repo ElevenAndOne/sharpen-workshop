@@ -65,7 +65,20 @@ export const event = {
 } as const;
 
 export const links = {
-  /** Priority #1 from the brief — every ticket CTA lands here. */
+  /**
+   * Priority #1 from the brief — every ticket CTA lands here.
+   *
+   * Migrating to GoHighLevel. The client asked for this on 10 Sept 2026 because
+   * Thrivecart takes the money without leaving a contact record, and GHL is what
+   * gives them tags, a registrant list and the reminder sequence. Both ticket
+   * products already exist in GHL against a connected Stripe; the checkout *page*
+   * is not built yet, so this deliberately still points at Thrivecart rather than
+   * at a URL that would 404 on a live page.
+   *
+   * Flipping this one line to `https://c.chefdeb.com/sharpen-2027-checkout` is the
+   * whole of the repo-side change once that page is published — every CTA and the
+   * announcement ticker read from here. See docs/ghl-checkout.md.
+   */
   checkout: 'https://chefdeb.thrivecart.com/sharpen-workshop-2025/',
   /* Four pages: the overview and pricing, both days, then Optional Events
      with the travel, stay, non-refundable policy and Bianca's details. Its
