@@ -25,7 +25,11 @@ import { event, links } from '../../data/site';
         registrationClosesAt={event.registrationClosesAt}
         registrationClosesLabel={event.registrationClosesLabel}
         checkoutUrl={links.checkout}
-        colleagueCode={bringAColleague.code}
+        colleague={{
+          offer: bringAColleague.offer,
+          note: bringAColleague.note,
+          href: bringAColleague.href,
+        }}
         eventDate={`${event.name} · ${event.dateShort} · ${event.city}`}
         client:load
       />

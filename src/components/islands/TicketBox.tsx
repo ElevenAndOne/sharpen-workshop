@@ -8,6 +8,7 @@ export interface TierData {
   priceWas?: number;
   price: number;
   href?: string;
+  secondary?: { cta: string; href: string; note: string };
   opensAfterEarlyBird?: boolean;
   opensLabel?: string;
   window: string;
@@ -24,7 +25,8 @@ interface Props {
   registrationClosesLabel: string;
   /** Used by any tier that doesn't carry its own checkout URL. */
   checkoutUrl: string;
-  colleagueCode: string;
+  /** The two-seat option, named once and used for the closing line. */
+  colleague: { offer: string; note: string; href: string };
   /** "SHARPEN 2027 · Jan. 28–29, 2027 · Fort Worth" — stated on every card so
       the year is unmissable before the (older) checkout page loads. */
   eventDate: string;
@@ -40,7 +42,7 @@ export default function TicketBox({
   registrationClosesAt,
   registrationClosesLabel,
   checkoutUrl,
-  colleagueCode,
+  colleague,
   eventDate,
 }: Props) {
   /* Once Early Bird closes the block collapses to the Regular card and the
@@ -150,6 +152,38 @@ export default function TicketBox({
                   <span className="sr-only"> (opens in a new tab)</span>
                 </a>
               )}
+
+              {/* The two-seat option sits under the single-seat CTA rather than
+                  beside it: one seat is the common case and stays the loud
+                  button, and the pair reads as a choice instead of a pair of
+                  equal demands. */}
+              {!locked && tier.secondary && (
+                <a
+                  href={tier.secondary.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={[
+                    'label mt-3 inline-flex w-full items-center justify-center gap-2 rounded-[2px] border px-6 py-4.5 transition-colors duration-200 portrait:py-4',
+                    tier.featured
+                      ? 'border-white/35 text-white hover:bg-white hover:text-gray-900'
+                      : 'border-line text-slate hover:border-gray-900 hover:text-gray-900',
+                  ].join(' ')}
+                >
+                  {tier.secondary.cta}
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              )}
+
+              {!locked && tier.secondary && (
+                <p
+                  className={[
+                    'mt-3 text-center text-small',
+                    tier.featured ? 'text-white/60' : 'text-slate-soft',
+                  ].join(' ')}
+                >
+                  {tier.secondary.note}
+                </p>
+              )}
             </div>
           );
         })}
@@ -181,8 +215,16 @@ export default function TicketBox({
         </p>
 
         <p className="mt-9 flex flex-wrap items-center justify-center gap-2.5 text-body text-slate portrait:mt-7">
-          Bringing someone? Second ticket half off with code
-          <span className="label inline-flex items-center bg-gold px-2 py-1 text-gray-900">{colleagueCode}</span>
+          Bringing someone?
+          <a
+            href={colleague.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline decoration-brand decoration-2 underline-offset-4 hover:text-ink-deep"
+          >
+            {colleague.offer}
+          </a>
+          <span className="text-slate-soft">— {colleague.note.toLowerCase()}.</span>
         </p>
       </div>
     </div>
