@@ -60,28 +60,47 @@ Two separate products rather than one product with two prices, because that is w
 the client asked for in the Loom and it matches how the rest of their catalogue is
 built (`Workshop Attendee`, `Workshop VIP`, `Workshop Regular`).
 
+**Payment Links** (Payments → Payment Links). **This is what the site now uses.**
+Both are Active, both allow coupon codes, and both were confirmed to return HTTP 200
+publicly with the right product and price:
+
+| Tier | Price | URL |
+|---|---|---|
+| Early Bird | $395 | `https://link.fastpaydirect.com/payment-link/6aa40b69e9a073174b3b5cbc` |
+| Regular | $495 | `https://link.fastpaydirect.com/payment-link/6aa40cbce9a073174b3b5cbf` |
+
+A payment link was chosen over a funnel page because it needs no page building and
+loses none of the automation — GoHighLevel's **Order Submitted** workflow trigger is
+enabled for payment links, so the contact, the order record, tags and workflows all
+behave exactly as they would on a funnel order form. The automation attaches to the
+order, not to the page.
+
 **Funnel** `SHARPEN 2027 Registration` — `RMI6MUJA4vmv5S5fIUVF`, in the `Workshop`
 folder, with one step:
 
 - `Checkout` — `c040e072-27f6-47e3-b79a-c58b1a332b3e`, path `sharpen-2027-checkout`
 
 The step is a **blank page with no domain attached, so it is not live** and nothing
-links to it. It reserves the name and the path; it still needs its order form.
+links to it. It is the scaffold for the branded checkout page described below.
 
 ## What is left
 
-1. **Design the Checkout page.** Open the step and either import the design from
-   `Sedona CEO Retreat Sales → Workshop Attendee` (Use existing → Funnel) or drop a
-   1-Step Order element onto a blank page. Importing does *not* carry products
-   across — they are attached separately, on the step's Products tab.
-2. **Attach both products** to the step (Products tab → Add Product).
-3. **Add a Thank You step** and point the order form's post-purchase redirect at it.
-   Suggested path `sharpen-2027-thank-you`, mirroring the Sedona funnel.
-4. **Attach the domain** `c.chefdeb.com` in the funnel's Settings, then publish. The
-   checkout then lives at `https://c.chefdeb.com/sharpen-2027-checkout`.
-5. **Flip the URL in this repo** — one line, `links.checkout` in
-   [`src/data/site.ts`](../src/data/site.ts). Every CTA follows it.
-6. **Build the automation**, which is the reason for the whole move:
+Nothing blocks taking money. These are in rough priority order.
+
+1. **Confirm the payment mode is Live, not Test.** The toggle in each payment link
+   reads as active, which should mean Live, and the public pages carry no test-mode
+   banner — but this was not provable from outside, and it is money. Eyeball it.
+2. **Set Automatic Deactivation on the Early Bird link** for 30 Nov 2026. Without
+   it, that link keeps selling a $495 seat for $395 from 1 Dec onward. The static
+   CTAs are baked at build time and cannot flip themselves, so this is the only
+   thing that makes the deadline real. Fail closed.
+3. **Decide the `BAC` coupon** — see below. The page advertises it today.
+4. **The checkout domain.** These links live on `link.fastpaydirect.com`, the
+   agency's white-label domain. A buyer clicking "Reserve your spot — $395" lands on
+   a domain with no visible relationship to Chef Deb, which is a trust cost on a $395
+   purchase. Worth checking whether payment links can be pointed at a `chefdeb.com`
+   domain, given `c.chefdeb.com` is already connected.
+5. **Build the automation** — the reason for the whole move:
    - tag on purchase — `sharpen-2027-registered`, plus `early-bird` / `regular`
    - confirmation email carrying the real terms: both days, **lunch daily,
      breakfast not provided**, non-refundable, agenda PDF, hotel note
@@ -90,9 +109,18 @@ links to it. It reserves the name and the path; it still needs its order form.
    - a separate RSVP form for the welcome dinner and Mastermind Day, which are *not*
      included in the ticket and must not be sold as if they were
 
-Steps 1–4 need GHL's visual builder and its product pickers, which are drag-and-drop
-Vue components. They are a hands-on job in the browser, not something that can be
-scripted.
+   None of this has to exist before the first sale. Purchases create the contact and
+   the order record regardless, and earlier buyers can be bulk-tagged from the Orders
+   list, so nothing is lost by adding workflows later.
+
+6. **The branded checkout page, before 1 Dec.** Two payment links cannot express
+   "whichever tier is currently open" to the static CTAs. One GHL checkout page that
+   offers the open tier solves that properly, and is what the client described in
+   their Loom. To build it: open the Checkout step → **Use existing** → Funnel →
+   `Sedona CEO Retreat Sales` → `Workshop Attendee` → Import, then attach both
+   products on the step's **Products** tab (the import deliberately does not carry
+   products across), add a Thank You step, attach `c.chefdeb.com` in funnel Settings
+   and publish. That needs the drag-and-drop builder, so it is a hands-on job.
 
 ## Coupons — `BAC` needs a decision before it is built
 
