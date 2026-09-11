@@ -43,11 +43,9 @@ Every section is `<Section><Container>…</Container></Section>`. Anything decor
 - **Countdown** switches from the Early Bird deadline to the registration close (Jan. 6, 2027).
 
 ### Things waiting on the client
-- The 60-second event reel (set `youtubeId` in `VideoSection.astro`; the slot links to Instagram until then)
-- Refund policy copy (`src/data/faq.ts`, flagged `pending`)
-- Sponsor logo files (name plates stand in)
 - 2026 room photography (the hero uses a 2024 SHARPEN photo carrying a photographer credit — confirm rights)
-- **DNS.** `sharpen.chefdeb.com` does not resolve — Cloudflare, which is authoritative for `chefdeb.com`, returns NXDOMAIN for the name, so no record exists in the zone yet.
+- **DNS.** `sharpen.chefdeb.com` still does not resolve — Cloudflare, which is authoritative for `chefdeb.com`, returns NXDOMAIN for the name, so no record exists in the zone yet. Re-checked 11 Sept 2026. Note this is unrelated to checkout: the GHL funnel domain `c.chefdeb.com` is already live, so the checkout needs no new record.
+- **The GHL checkout page.** Products exist; the page that sells them does not. See [docs/ghl-checkout.md](docs/ghl-checkout.md).
 - **What happens to `chefdeb.com/sharpen-2027/`.** That WordPress page is live and carries the same content. Once this build is published, two URLs will compete for the same searches. Whoever owns the decision needs to pick one: either retire the WordPress page and 301 it here, or leave it as the primary and have this page canonicalise to it. Until that is settled this page self-canonicalises, which is the right default for the page that is going live but is not a substitute for the decision.
 
 ## SEO and share metadata
@@ -65,4 +63,8 @@ node scripts/generate-brand-assets.mjs
 The icon glyph is the knife-"A" lifted out of the client's own SHARPEN wordmark; the share card reuses the hero's photograph and composition. Re-run after changing either. The script downloads the Mulish variable TTF into `node_modules/.cache` on first run, because librsvg cannot read the woff2 the site ships.
 
 ## Checkout
-All ticket CTAs go to the Thrivecart page at `https://chefdeb.thrivecart.com/sharpen-workshop-2025/` (the slug is legacy but correct). Coupon codes are passed as `?coupon=CODE`. Only the two public codes appear in this repository.
+All ticket CTAs read `links.checkout` in `src/data/site.ts` and currently go to the Thrivecart page at `https://chefdeb.thrivecart.com/sharpen-workshop-2025/` (the slug is legacy but correct).
+
+Checkout is **migrating to GoHighLevel** — the client's decision on 10 Sept 2026, because Thrivecart leaves no contact record and GHL is what gives them tags, a registrant list and reminders. Both ticket products are already created in GHL against a connected Stripe; the page that sells them is not built yet, so the link above is still the live one. [docs/ghl-checkout.md](docs/ghl-checkout.md) has the account details, what exists, what is left, and the one open pricing decision on the `BAC` code.
+
+`BAC` — second ticket half off — is advertised for the buyer to type. It is not pre-applied to any URL, and no discount code is stored in this repository.
