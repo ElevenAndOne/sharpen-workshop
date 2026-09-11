@@ -1,7 +1,8 @@
 ---
 import '@fontsource-variable/mulish';
 import '../styles/global.css';
-import { event, links } from '../data/site';
+import { event, links, contacts, social } from '../data/site';
+import { faqs } from '../data/faq';
 
 interface Props {
   title?: string;
@@ -9,57 +10,161 @@ interface Props {
   canonical?: string;
 }
 
+/**
+ * Absolute URLs for everything a crawler or a share card needs. `Astro.site`
+ * is the one place the production origin is declared (astro.config.mjs), so
+ * moving the page to another host is a one-line change here and nowhere else.
+ */
+const site = Astro.site ?? new URL('https://sharpen.chefdeb.com');
+const abs = (p: string) => new URL(p, site).href;
+
 const {
-  title = `${event.name} — ${event.tagline} | Chef Deb`,
-  description = `${event.name}. ${event.dateLine} in ${event.city}. Two days on price, cost and volume — run against your own numbers — and a 90-day plan to go get it. Fifty seats, no fluff, nobody selling you a course from the stage.`,
-  canonical = 'https://chefdeb.com/sharpen-2-day-workshop/',
+  /* Kept under ~60 characters so Google shows it whole rather than truncating
+     mid-phrase. The tagline is long and lives in og:site_name and the H1. */
+  title = `${event.name} — Food & Hospitality Owners' Workshop | Chef Deb`,
+  /* ~155 characters for the same reason. The old default ran to 235 and was
+     cut off in the middle of the seat count. */
+  description = `Two days on price, cost and volume — run against your own numbers — and a 90-day plan for 2027. ${event.dateShort}, ${event.city}. ${event.seats} seats.`,
+  /**
+   * Self-canonical. This previously pointed at chefdeb.com/sharpen-2-day-workshop/,
+   * which returns 404 — so the page was handing its ranking signal to a dead
+   * URL. See README for the open question of what happens to the existing
+   * WordPress page at /sharpen-2027/ once this one is live.
+   */
+  canonical = abs(Astro.url.pathname),
 } = Astro.props;
 
-/* Event structured data — this is a real, dated, ticketed event. */
-const eventSchema = {
+const ogImage = abs('/og-image.jpg');
+
+/**
+ * One linked graph rather than a lone Event node.
+ *
+ * Search engines and answer engines resolve entities and the relationships
+ * between them, so the organisation, the page, the event and the questions are
+ * declared once each and cross-referenced by `@id`. That lets a crawler follow
+ * "this event is run by this organisation, which owns this site" instead of
+ * inferring it from prose.
+ */
+const graph = {
   '@context': 'https://schema.org',
-  '@type': 'BusinessEvent',
-  name: event.name,
-  description,
-  startDate: '2027-01-28T09:00:00-06:00',
-  endDate: '2027-01-29T17:00:00-06:00',
-  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-  eventStatus: 'https://schema.org/EventScheduled',
-  location: {
-    '@type': 'Place',
-    name: event.venue.name,
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: event.venue.detail,
-      addressLocality: 'Fort Worth',
-      addressRegion: 'TX',
-      addressCountry: 'US',
-    },
-  },
-  organizer: {
-    '@type': 'Organization',
-    name: 'Chef Deb Coaching',
-    url: links.home,
-  },
-  maximumAttendeeCapacity: event.seats,
-  offers: [
+  '@graph': [
     {
-      '@type': 'Offer',
-      name: 'Early Bird',
-      price: '395',
-      priceCurrency: 'USD',
-      availability: 'https://schema.org/InStock',
-      url: links.checkout,
-      validThrough: event.earlyBirdEndsAt,
+      '@type': 'Organization',
+      '@id': `${links.home}#organization`,
+      name: 'Chef Deb Coaching',
+      url: links.home,
+      logo: {
+        '@type': 'ImageObject',
+        url: abs('/brand/chefdeb-logo-white.png'),
+      },
+      sameAs: social.map((s) => s.href),
+      contactPoint: contacts.map((c) => ({
+        '@type': 'ContactPoint',
+        contactType: 'Registration and attendee enquiries',
+        name: c.name,
+        email: c.email,
+        telephone: c.phoneHref.replace('tel:', ''),
+        availableLanguage: 'English',
+      })),
     },
     {
-      '@type': 'Offer',
-      name: 'Regular',
-      price: '495',
-      priceCurrency: 'USD',
-      availability: 'https://schema.org/InStock',
-      url: links.checkout,
-      validThrough: event.registrationClosesAt,
+      '@type': 'WebSite',
+      '@id': `${site.origin}/#website`,
+      url: site.origin,
+      name: `${event.name} — Chef Deb Coaching`,
+      inLanguage: 'en-US',
+      publisher: { '@id': `${links.home}#organization` },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${canonical}#webpage`,
+      url: canonical,
+      name: title,
+      description,
+      inLanguage: 'en-US',
+      isPartOf: { '@id': `${site.origin}/#website` },
+      about: { '@id': `${canonical}#event` },
+      primaryImageOfPage: { '@type': 'ImageObject', url: ogImage },
+    },
+    {
+      '@type': 'Person',
+      '@id': `${links.home}#chefdeb`,
+      name: 'Chef Deb',
+      jobTitle: 'Business coach for food, beverage and hospitality owners',
+      url: links.home,
+      worksFor: { '@id': `${links.home}#organization` },
+    },
+    {
+      '@type': 'BusinessEvent',
+      '@id': `${canonical}#event`,
+      name: event.name,
+      description,
+      url: canonical,
+      image: [ogImage],
+      startDate: '2027-01-28T09:00:00-06:00',
+      endDate: '2027-01-29T17:00:00-06:00',
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+      eventStatus: 'https://schema.org/EventScheduled',
+      inLanguage: 'en-US',
+      isAccessibleForFree: false,
+      maximumAttendeeCapacity: event.seats,
+      location: {
+        '@type': 'Place',
+        name: event.venue.name,
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: event.venue.detail,
+          addressLocality: 'Fort Worth',
+          addressRegion: 'TX',
+          addressCountry: 'US',
+        },
+      },
+      organizer: { '@id': `${links.home}#organization` },
+      performer: { '@id': `${links.home}#chefdeb` },
+      audience: {
+        '@type': 'BusinessAudience',
+        name: 'Food, beverage and hospitality business owners',
+      },
+      offers: [
+        {
+          '@type': 'Offer',
+          name: 'Early Bird',
+          price: '395',
+          priceCurrency: 'USD',
+          availability: 'https://schema.org/InStock',
+          url: links.checkout,
+          validThrough: event.earlyBirdEndsAt,
+          category: 'primary',
+        },
+        {
+          '@type': 'Offer',
+          name: 'Regular',
+          price: '495',
+          priceCurrency: 'USD',
+          availability: 'https://schema.org/InStock',
+          url: links.checkout,
+          validFrom: event.earlyBirdEndsAt,
+          validThrough: event.registrationClosesAt,
+          category: 'primary',
+        },
+      ],
+    },
+    {
+      /**
+       * The FAQ answers are already written as self-contained passages — one
+       * question answered completely, no "as mentioned above". That is the
+       * unit an answer engine lifts, so marking them up is what makes the page
+       * quotable rather than merely crawlable.
+       */
+      '@type': 'FAQPage',
+      '@id': `${canonical}#faq`,
+      inLanguage: 'en-US',
+      isPartOf: { '@id': `${canonical}#webpage` },
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
     },
   ],
 };
@@ -70,25 +175,56 @@ const eventSchema = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical} />
 
     <title>{title}</title>
     <meta name="description" content={description} />
 
+    <!--
+      Icons. These were the stock Astro set until Sept 2026 — the framework's
+      own rocket. The mark is the knife-"A" lifted out of the client's SHARPEN
+      wordmark, white on brand red; see scripts/generate-brand-assets.mjs.
+    -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Let Google use the full-size share image and an untruncated snippet. -->
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+
+    <!--
+      The page previously declared summary_large_image while supplying no
+      image at all, so every share rendered as a bare grey link.
+    -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="Chef Deb Coaching" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content={`SHARPEN 2027 — ${event.dateShort}, ${event.city}. A full room of food and hospitality business owners at work, hands raised.`}
+    />
 
-    <meta name="theme-color" content="#141414" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <meta name="theme-color" content="#161616" />
 
     <script
       type="application/ld+json"
       is:inline
-      set:html={JSON.stringify(eventSchema)}
+      set:html={JSON.stringify(graph)}
     />
   </head>
 
