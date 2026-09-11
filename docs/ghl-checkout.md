@@ -55,6 +55,7 @@ the two tiers the page sells:
 |---|---|---|
 | SHARPEN 2027 Early Bird Ticket | $395 | `6aa401d4da430b73790bf564` |
 | SHARPEN 2027 Regular Ticket | $495 | `6aa402376c4d00c40d64c4e6` |
+| SHARPEN 2027 Bring a Colleague (2 seats) | $592.50 | `6aa41b58c06be4cc653e2e11` |
 
 Two separate products rather than one product with two prices, because that is what
 the client asked for in the Loom and it matches how the rest of their catalogue is
@@ -68,6 +69,7 @@ publicly with the right product and price:
 |---|---|---|
 | Early Bird | $395 | `https://link.fastpaydirect.com/payment-link/6aa40b69e9a073174b3b5cbc` |
 | Regular | $495 | `https://link.fastpaydirect.com/payment-link/6aa40cbce9a073174b3b5cbf` |
+| Bring a Colleague (2 seats) | $592.50 | `https://link.fastpaydirect.com/payment-link/6aa41bd8ceb12d9fc1a8c588` |
 
 A payment link was chosen over a funnel page because it needs no page building and
 loses none of the automation — GoHighLevel's **Order Submitted** workflow trigger is
@@ -122,27 +124,35 @@ Nothing blocks taking money. These are in rough priority order.
    products across), add a Thank You step, attach `c.chefdeb.com` in funnel Settings
    and publish. That needs the drag-and-drop builder, so it is a hands-on job.
 
-## Coupons — `BAC` needs a decision before it is built
+## Coupons — settled, and there are none
 
-The page advertises `BAC` — "second ticket half off" — as a code the buyer types.
-GHL coupons are **percentage or fixed amount off the whole order**, so there is no
-direct way to express "half off the second one":
+`BAC` was advertised as a code the buyer typed for "second ticket half off". The
+client settled this on 11 Sept 2026 in favour of a **two-seat product** at $592.50
+($395 + half of $395), and the code is gone from the site.
 
-- A **50% coupon** on a two-seat order discounts *both* tickets — $395 instead of
-  the intended $592.50. It loses the client $197.50 every time it is used.
-- A **fixed $197.50 coupon** gives the right answer on a two-seat order, but also
-  applies to a one-seat order unless a minimum can be enforced.
+The reason is arithmetic rather than taste. GoHighLevel coupons discount the whole
+order, so a 50% code on a two-seat order would have halved *both* tickets — $395
+instead of $592.50, costing $197.50 every time it was used. A fixed-amount code
+priced for two seats would have applied to one-seat orders too. A product priced at
+exactly $592.50 states the offer and cannot be misapplied.
 
-The clean alternative is a **third product** — `SHARPEN 2027 Bring a Colleague (2
-seats)` at **$592.50** — which cannot be misapplied and is self-documenting. That
-changes `BAC` from a code into a ticket option, which is a content change to the
-page and therefore the client's call.
+On the page this became a second button on the Early Bird card — one seat or two,
+chosen at the point of buying — plus a button in the Bring a Colleague section.
 
-**No coupon has been created.** Creating a wrong one costs real money on every
-order, so this is deliberately left for the client to settle.
+**There is no coupon anywhere in this account for SHARPEN, and no discount code on
+the site.** Coupon fields are being switched off across the products. If a code is
+ever reintroduced, check first how the platform actually applies it to a multi-seat
+order.
 
-The client's internal comp and scholarship codes stay in ClickUp. They must never
-appear in this repository or in the build. `BAC` remains the only public code.
+The client's internal comp and scholarship codes stay in ClickUp and must never
+appear in this repository or in the build.
+
+### Still open: the two-seat option after 1 December
+
+The $592.50 product is priced off Early Bird. When Regular opens on 1 Dec the
+equivalent would be $742.50 ($495 + half of $495), and no such product exists. Either
+create one at that point or accept that Bring a Colleague is an Early Bird offer
+only — worth deciding before the switchover rather than after.
 
 ## Existing Thrivecart registrants
 

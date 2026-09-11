@@ -67,4 +67,4 @@ All ticket CTAs read `links.checkout` in `src/data/site.ts` and currently go to 
 
 Checkout is **migrating to GoHighLevel** — the client's decision on 10 Sept 2026, because Thrivecart leaves no contact record and GHL is what gives them tags, a registrant list and reminders. Both ticket products are already created in GHL against a connected Stripe; the page that sells them is not built yet, so the link above is still the live one. [docs/ghl-checkout.md](docs/ghl-checkout.md) has the account details, what exists, what is left, and the one open pricing decision on the `BAC` code.
 
-`BAC` — second ticket half off — is advertised for the buyer to type. It is not pre-applied to any URL, and no discount code is stored in this repository.
+There is **no discount code** on this site. `BAC` — second ticket half off — was retired on 11 Sept 2026 in favour of a two-seat product at $592.50, because GoHighLevel coupons discount the whole order and a 50% code would have halved both tickets rather than the second one. It shows as a second button on the Early Bird card.
