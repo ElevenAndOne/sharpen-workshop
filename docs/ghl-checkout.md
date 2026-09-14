@@ -61,48 +61,45 @@ Two separate products rather than one product with two prices, because that is w
 the client asked for in the Loom and it matches how the rest of their catalogue is
 built (`Workshop Attendee`, `Workshop VIP`, `Workshop Regular`).
 
-**Payment Links** (Payments → Payment Links). **This is what the site now uses.**
-Both are Active, both allow coupon codes, and both were confirmed to return HTTP 200
-publicly with the right product and price:
+**Funnel pages** — `SHARPEN 2027 Registration` (`RMI6MUJA4vmv5S5fIUVF`, in the
+`Workshop` folder), published on `c.chefdeb.com`. **This is what the site now uses.**
+One step per purchasable thing, each with its product attached; all three were
+confirmed to return HTTP 200 publicly with the right product name and price:
 
 | Tier | Price | URL |
 |---|---|---|
-| Early Bird | $395 | `https://link.fastpaydirect.com/payment-link/6aa40b69e9a073174b3b5cbc` |
-| Regular | $495 | `https://link.fastpaydirect.com/payment-link/6aa40cbce9a073174b3b5cbf` |
-| Bring a Colleague (2 seats) | $592.50 | `https://link.fastpaydirect.com/payment-link/6aa41bd8ceb12d9fc1a8c588` |
+| Early Bird | $395 | `https://c.chefdeb.com/sharpen-2027-early-bird` |
+| Regular | $495 | `https://c.chefdeb.com/sharpen-2027-regular` |
+| Bring a Colleague (2 seats) | $592.50 | `https://c.chefdeb.com/sharpen-2027-bring-a-colleague` |
 
-A payment link was chosen over a funnel page because it needs no page building and
-loses none of the automation — GoHighLevel's **Order Submitted** workflow trigger is
-enabled for payment links, so the contact, the order record, tags and workflows all
-behave exactly as they would on a funnel order form. The automation attaches to the
-order, not to the page.
+These replaced the interim payment links on `link.fastpaydirect.com`, which the site
+used from 11 Sept 2026 and which are recorded here only so an old link found
+elsewhere can be recognised: Early Bird `6aa40b69e9a073174b3b5cbc`, Regular
+`6aa40cbce9a073174b3b5cbf`, Bring a Colleague `6aa41bd8ceb12d9fc1a8c588`. Payment
+links were chosen originally because they needed no page building and lost none of
+the automation — the **Order Submitted** trigger fires for both. What the funnel
+pages add is the client's own domain and branding on a $395 purchase, which is why
+the client asked for them ("Please add the funnel page, the client wants that",
+ClickUp, Sept 2026).
 
-**Funnel** `SHARPEN 2027 Registration` — `RMI6MUJA4vmv5S5fIUVF`, in the `Workshop`
-folder, with one step:
-
-- `Checkout` — `c040e072-27f6-47e3-b79a-c58b1a332b3e`, path `sharpen-2027-checkout`
-
-The step is a **blank page with no domain attached, so it is not live** and nothing
-links to it. It is the scaffold for the branded checkout page described below.
+The automation attaches to the order, not to the page, so moving from links to pages
+changes nothing about contacts, tags or workflows.
 
 ## What is left
 
 Nothing blocks taking money. These are in rough priority order.
 
-1. **Confirm the payment mode is Live, not Test.** The toggle in each payment link
-   reads as active, which should mean Live, and the public pages carry no test-mode
-   banner — but this was not provable from outside, and it is money. Eyeball it.
-2. **Set Automatic Deactivation on the Early Bird link** for 30 Nov 2026. Without
-   it, that link keeps selling a $495 seat for $395 from 1 Dec onward. The static
-   CTAs are baked at build time and cannot flip themselves, so this is the only
-   thing that makes the deadline real. Fail closed.
-3. **Decide the `BAC` coupon** — see below. The page advertises it today.
-4. **The checkout domain.** These links live on `link.fastpaydirect.com`, the
-   agency's white-label domain. A buyer clicking "Reserve your spot — $395" lands on
-   a domain with no visible relationship to Chef Deb, which is a trust cost on a $395
-   purchase. Worth checking whether payment links can be pointed at a `chefdeb.com`
-   domain, given `c.chefdeb.com` is already connected.
-5. **Build the automation** — the reason for the whole move:
+1. **Confirm the payment mode is Live, not Test.** The three funnel pages are
+   published and carry no test-mode banner, and each shows the right product and
+   price — but the Live/Test toggle on the order-form element was not provable from
+   outside, and it is money. Eyeball it in the builder.
+2. **Close the Early Bird page on 30 Nov 2026.** Unpublish the step, or point it at
+   the Regular page. Without that, it keeps selling a $495 seat for $395 from 1 Dec
+   onward. The static CTAs are baked at build time and cannot flip themselves, so
+   this is the only thing that makes the deadline real. Fail closed.
+3. **Build the automation** — the reason for the whole move. Bridget, ClickUp
+   Sept 2026: "no need to build tags, the client will do that", so the tagging
+   below is the client's job; the rest is still open:
    - tag on purchase — `sharpen-2027-registered`, plus `early-bird` / `regular`
    - confirmation email carrying the real terms: both days, **lunch daily,
      breakfast not provided**, non-refundable, agenda PDF, hotel note
@@ -115,14 +112,17 @@ Nothing blocks taking money. These are in rough priority order.
    the order record regardless, and earlier buyers can be bulk-tagged from the Orders
    list, so nothing is lost by adding workflows later.
 
-6. **The branded checkout page, before 1 Dec.** Two payment links cannot express
-   "whichever tier is currently open" to the static CTAs. One GHL checkout page that
-   offers the open tier solves that properly, and is what the client described in
-   their Loom. To build it: open the Checkout step → **Use existing** → Funnel →
-   `Sedona CEO Retreat Sales` → `Workshop Attendee` → Import, then attach both
-   products on the step's **Products** tab (the import deliberately does not carry
-   products across), add a Thank You step, attach `c.chefdeb.com` in funnel Settings
-   and publish. That needs the drag-and-drop builder, so it is a hands-on job.
+4. **A Thank You step.** The funnel has three checkout steps and no post-purchase
+   page, so a buyer's last screen is whatever GHL shows by default. Add one that
+   confirms the real terms — both days, lunch daily, breakfast not provided,
+   non-refundable — and links the agenda PDF.
+
+5. **One page that offers whichever tier is open, before 1 Dec.** Three separate
+   pages still cannot express "the tier that is currently open" to a static CTA, so
+   `links.checkout` has to be swapped by hand at the switchover. A single checkout
+   page that serves the open tier removes that hand-edit, and is what the client
+   described in their Loom. Lower priority now that the pages are branded and live;
+   item 2 is what actually protects the money.
 
 ## Coupons — settled, and there are none
 
@@ -160,4 +160,4 @@ Anyone who has already bought through Thrivecart exists in Stripe but not
 necessarily in GHL Contacts. Before the reminder sequence goes out, confirm whether
 Thrivecart and GHL are on the same Stripe account, and import past buyers with the
 `sharpen-2027-registered` tag — otherwise they are invisible to every workflow built
-in step 6 and the seat count will be wrong.
+in step 3 and the seat count will be wrong.

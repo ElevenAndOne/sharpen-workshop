@@ -45,14 +45,24 @@ export const event = {
     headline: 'Two days. A\u00A0different 2027.',
     subhead:
       "The must attend event for Food, Beverage & Hospitality leaders shaping what's next.",
-    /* Client note, Sept 2026: "all business owners want to know is how much
-       money will it make me and how fast." So the lead claim is now the
-       Power of One thesis — the money is in price, cost and volume, which the
-       owner already controls — and the answer to "how fast" is the 90-day
-       plan they leave with. No earnings figure is promised, because none was
-       supplied; what is promised is that they run their own numbers. */
-    heading: 'The fastest money in your business is already in your numbers.',
-    body: "Two days on the three levers that move it — price, cost, volume — run against your own figures, and a 90-day plan to go get it.",
+    /* Supplied verbatim by the client via Bridget, ClickUp 869eu5rhz, Sept
+       2026, marked ASAP. It replaces the Power of One lead ("The fastest money
+       in your business is already in your numbers" + the price/cost/volume
+       levers), which came from the earlier Sept 2026 steer that "all business
+       owners want to know is how much money will it make me and how fast."
+       The new copy trades that specificity for the broader promise — steady
+       growth, repeat clients, a business that serves the owner's life. Still
+       no earnings figure, because none has ever been supplied.
+
+       The client's sentence ran "…not by accident.In two days…" with the space
+       missing; that is a typo, not a line break, and is fixed here. The rest
+       is untouched. */
+    heading: 'Build a business that grows on purpose, not by accident.',
+    body: "In two days you'll leave with a plan for steady, reliable growth and a way to keep clients coming, so your business works for your life instead of running it.",
+    /* Chef Deb's trademarked program phrase, which the client closed the hero
+       copy with. Set on its own line rather than trailing the sentence: it is
+       a sign-off, not a clause. */
+    signature: 'From the Stove to CEO\u2122',
     lines: [
       'Fifty seats. No fluff. Nobody selling you a course from the stage.',
       "Because there is no ONE plan for ALL food, beverage and hospitality businesses — you'll leave with yours, written down and prioritized for 2027.",
@@ -70,26 +80,29 @@ export const links = {
    * ticker, hero, video band, footer, final CTA, the JSON-LD offer and llms.txt.
    * TicketBox does NOT use it; each tier carries its own link (see tickets.ts).
    *
-   * Now a GoHighLevel payment link, replacing Thrivecart. The client asked for
-   * this on 10 Sept 2026: Thrivecart takes the money but leaves no contact
-   * record, and GHL creates the contact on purchase, which is what makes tags,
-   * the registrant list and the reminder sequence possible.
+   * Now a GoHighLevel funnel page on the client's own `c.chefdeb.com`,
+   * replacing Thrivecart. The client asked for this on 10 Sept 2026:
+   * Thrivecart takes the money but leaves no contact record, and GHL creates
+   * the contact on purchase, which is what makes tags, the registrant list and
+   * the reminder sequence possible. These replaced the interim
+   * `link.fastpaydirect.com` payment links in Sept 2026 — same products and
+   * prices, but branded and on the client's domain.
    *
    * This points at **Early Bird**, which is correct until Nov. 30, 2026 and
    * wrong on Dec. 1. These are static CTAs baked at build time, so unlike
    * PriceTag and TicketBox they cannot flip themselves. Two things must happen
    * before Dec. 1, and neither is optional:
    *
-   *   1. Set Automatic Deactivation on the Early Bird payment link in GHL, so
-   *      that after Nov. 30 it stops taking money instead of quietly selling a
-   *      $495 seat for $395. Fail closed, not open.
-   *   2. Swap this line to the Regular link, or replace both with one GHL
-   *      checkout page that offers whichever tier is open — which is what the
-   *      client originally described in their Loom, and the better end state.
+   *   1. Unpublish or gate the Early Bird funnel step in GHL, so that after
+   *      Nov. 30 it stops taking money instead of quietly selling a $495 seat
+   *      for $395. Fail closed, not open.
+   *   2. Swap this line to the Regular page, or replace both with one checkout
+   *      page that offers whichever tier is open — which is what the client
+   *      originally described in their Loom, and the better end state.
    *
    * See docs/ghl-checkout.md.
    */
-  checkout: 'https://link.fastpaydirect.com/payment-link/6aa40b69e9a073174b3b5cbc',
+  checkout: 'https://c.chefdeb.com/sharpen-2027-early-bird',
   /* Four pages: the overview and pricing, both days, then Optional Events
      with the travel, stay, non-refundable policy and Bianca's details. Its
      prices match the tiers below, and its only contact is Bianca — so it

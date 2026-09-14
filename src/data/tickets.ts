@@ -9,11 +9,11 @@ export interface Tier {
   /**
    * Per-tier checkout URL; falls back to the shared one when absent.
    *
-   * Both tiers now carry their own GoHighLevel payment link, which is what
-   * makes the Dec. 1 switchover safe here: TicketBox is a client island, so it
-   * picks the tier for the visitor's own date and sends them to that tier's
-   * link. The shared `links.checkout` cannot do that — see the note on it in
-   * site.ts.
+   * Both tiers now carry their own GoHighLevel funnel page on `c.chefdeb.com`,
+   * which is what makes the Dec. 1 switchover safe here: TicketBox is a client
+   * island, so it picks the tier for the visitor's own date and sends them to
+   * that tier's page. The shared `links.checkout` cannot do that — see the
+   * note on it in site.ts.
    */
   href?: string;
   /**
@@ -38,10 +38,10 @@ export const tiers: Tier[] = [
     badge: 'Save $100',
     priceWas: 495,
     price: 395,
-    href: 'https://link.fastpaydirect.com/payment-link/6aa40b69e9a073174b3b5cbc',
+    href: 'https://c.chefdeb.com/sharpen-2027-early-bird',
     secondary: {
       cta: 'Bring a colleague — $592.50',
-      href: 'https://link.fastpaydirect.com/payment-link/6aa41bd8ceb12d9fc1a8c588',
+      href: 'https://c.chefdeb.com/sharpen-2027-bring-a-colleague',
       note: 'Two seats. Second one half price.',
     },
     window: `Through ${event.earlyBirdEndsLabel}`,
@@ -52,7 +52,7 @@ export const tiers: Tier[] = [
     id: 'regular',
     name: 'Regular',
     price: 495,
-    href: 'https://link.fastpaydirect.com/payment-link/6aa40cbce9a073174b3b5cbf',
+    href: 'https://c.chefdeb.com/sharpen-2027-regular',
     opensAfterEarlyBird: true,
     opensLabel: `Opens ${event.regularOpensLabel}`,
     window: `Registration closes ${event.registrationClosesLabel}`,
@@ -83,5 +83,5 @@ export const bringAColleague = {
   offer: 'Two seats for $592.50',
   note: 'Second ticket half off',
   cta: 'Bring a colleague — $592.50',
-  href: 'https://link.fastpaydirect.com/payment-link/6aa41bd8ceb12d9fc1a8c588',
+  href: 'https://c.chefdeb.com/sharpen-2027-bring-a-colleague',
 } as const;

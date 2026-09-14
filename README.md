@@ -45,7 +45,7 @@ Every section is `<Section><Container>…</Container></Section>`. Anything decor
 ### Things waiting on the client
 - 2026 room photography (the hero uses a 2024 SHARPEN photo carrying a photographer credit — confirm rights)
 - **DNS.** `sharpen.chefdeb.com` still does not resolve — Cloudflare, which is authoritative for `chefdeb.com`, returns NXDOMAIN for the name, so no record exists in the zone yet. Re-checked 11 Sept 2026. Note this is unrelated to checkout: the GHL funnel domain `c.chefdeb.com` is already live, so the checkout needs no new record.
-- **The GHL checkout page.** Products exist; the page that sells them does not. See [docs/ghl-checkout.md](docs/ghl-checkout.md).
+- **Closing Early Bird on 30 Nov 2026.** The funnel page has to be unpublished or repointed in GHL, or it keeps selling a $495 seat for $395. Nothing in this repo can do that. See [docs/ghl-checkout.md](docs/ghl-checkout.md).
 - **What happens to `chefdeb.com/sharpen-2027/`.** That WordPress page is live and carries the same content. Once this build is published, two URLs will compete for the same searches. Whoever owns the decision needs to pick one: either retire the WordPress page and 301 it here, or leave it as the primary and have this page canonicalise to it. Until that is settled this page self-canonicalises, which is the right default for the page that is going live but is not a substitute for the decision.
 
 ## SEO and share metadata
@@ -63,8 +63,14 @@ node scripts/generate-brand-assets.mjs
 The icon glyph is the knife-"A" lifted out of the client's own SHARPEN wordmark; the share card reuses the hero's photograph and composition. Re-run after changing either. The script downloads the Mulish variable TTF into `node_modules/.cache` on first run, because librsvg cannot read the woff2 the site ships.
 
 ## Checkout
-All ticket CTAs read `links.checkout` in `src/data/site.ts` and currently go to the Thrivecart page at `https://chefdeb.thrivecart.com/sharpen-workshop-2025/` (the slug is legacy but correct).
+Checkout moved off Thrivecart and onto **GoHighLevel** — the client's decision on 10 Sept 2026, because Thrivecart leaves no contact record and GHL is what gives them tags, a registrant list and reminders. It now runs on three branded funnel pages on the client's own domain:
 
-Checkout is **migrating to GoHighLevel** — the client's decision on 10 Sept 2026, because Thrivecart leaves no contact record and GHL is what gives them tags, a registrant list and reminders. Both ticket products are already created in GHL against a connected Stripe; the page that sells them is not built yet, so the link above is still the live one. [docs/ghl-checkout.md](docs/ghl-checkout.md) has the account details, what exists, what is left, and the one open pricing decision on the `BAC` code.
+| Tier | Price | URL |
+|---|---|---|
+| Early Bird | $395 | `https://c.chefdeb.com/sharpen-2027-early-bird` |
+| Regular | $495 | `https://c.chefdeb.com/sharpen-2027-regular` |
+| Bring a Colleague (2 seats) | $592.50 | `https://c.chefdeb.com/sharpen-2027-bring-a-colleague` |
+
+The static CTAs — announcement bar, hero, video band, footer, final CTA, JSON-LD, llms.txt — all read `links.checkout` in `src/data/site.ts`, which points at Early Bird and **must be swapped to Regular on 1 Dec 2026**. `TicketBox` does not use it: each tier carries its own URL in `src/data/tickets.ts`, so the ticket box flips itself. [docs/ghl-checkout.md](docs/ghl-checkout.md) has the account details, what exists and what is left.
 
 There is **no discount code** on this site. `BAC` — second ticket half off — was retired on 11 Sept 2026 in favour of a two-seat product at $592.50, because GoHighLevel coupons discount the whole order and a 50% code would have halved both tickets rather than the second one. It shows as a second button on the Early Bird card.
