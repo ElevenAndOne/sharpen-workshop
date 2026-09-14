@@ -44,7 +44,7 @@ Every section is `<Section><Container>…</Container></Section>`. Anything decor
 
 ### Things waiting on the client
 - 2026 room photography (the hero uses a 2024 SHARPEN photo carrying a photographer credit — confirm rights)
-- **DNS.** `sharpen.chefdeb.com` still does not resolve — Cloudflare, which is authoritative for `chefdeb.com`, returns NXDOMAIN for the name, so no record exists in the zone yet. Re-checked 11 Sept 2026. Note this is unrelated to checkout: the GHL funnel domain `c.chefdeb.com` is already live, so the checkout needs no new record.
+- ~~**DNS.**~~ Settled. `sharpen.chefdeb.com` resolves as of 14 Sept 2026 — CNAME to Vercel — and serves this build over HTTPS. It had returned NXDOMAIN through 11 Sept. Checkout never depended on it: the GHL funnel domain `c.chefdeb.com` was already live.
 - **Closing Early Bird on 30 Nov 2026.** The funnel page has to be unpublished or repointed in GHL, or it keeps selling a $495 seat for $395. Nothing in this repo can do that. See [docs/ghl-checkout.md](docs/ghl-checkout.md).
 - **What happens to `chefdeb.com/sharpen-2027/`.** That WordPress page is live and carries the same content. Once this build is published, two URLs will compete for the same searches. Whoever owns the decision needs to pick one: either retire the WordPress page and 301 it here, or leave it as the primary and have this page canonicalise to it. Until that is settled this page self-canonicalises, which is the right default for the page that is going live but is not a substitute for the decision.
 
