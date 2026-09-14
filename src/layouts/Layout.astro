@@ -23,8 +23,19 @@ const {
      mid-phrase. The tagline is long and lives in og:site_name and the H1. */
   title = `${event.name} — Food & Hospitality Owners' Workshop | Chef Deb`,
   /* ~155 characters for the same reason. The old default ran to 235 and was
-     cut off in the middle of the seat count. */
-  description = `Two days on price, cost and volume — run against your own numbers — and a 90-day plan for 2027. ${event.dateShort}, ${event.city}. ${event.seats} seats.`,
+     cut off in the middle of the seat count.
+
+     Leads on the client's own hero sentence, supplied Sept 2026, so the
+     snippet and the first thing on the page say the same thing. It replaced a
+     price/cost/volume lead that stopped matching the hero when the copy
+     changed — that framing is still true and still carries the agenda's Profit
+     track, it just no longer opens the page.
+
+     The budget is tight: the client's sentence is 56 characters and the
+     generated date/city/seats tail is 45, which leaves ~55 for the middle.
+     "and repeat clients" was the half of the hero promise that had to go —
+     this lands at 151. Anything added here has to come back out somewhere. */
+  description = `Build a business that grows on purpose, not by accident. Two days, and a written plan for steady growth. ${event.dateShort}, ${event.city}. ${event.seats} seats.`,
   /**
    * Self-canonical. This previously pointed at chefdeb.com/sharpen-2-day-workshop/,
    * which returns 404 — so the page was handing its ranking signal to a dead

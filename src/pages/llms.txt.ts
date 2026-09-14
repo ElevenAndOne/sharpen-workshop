@@ -48,10 +48,12 @@ export const GET: APIRoute = ({ site }) => {
 > business owners, run by Chef Deb Coaching. ${event.dateLine}, at the
 > ${event.venue.name} in ${event.city}. ${event.seats} seats. ${priceLine}.
 
-${event.edition} edition. This is a working session, not a conference: attendees
-run their own numbers in the room and leave with a written, prioritised 90-day
-plan for 2027. The focus is the three levers an owner already controls — price,
-cost and volume. No earnings figure is promised.
+${event.edition} edition. This is a working session, not a conference. The promise
+is a business that grows on purpose rather than by accident: attendees leave with a
+written, prioritised 90-day plan for steady growth and for keeping clients coming
+back. They run their own numbers in the room, against the three levers an owner
+already controls — price, cost and volume. No earnings figure is promised, and
+none has ever been supplied.
 
 ## Key facts
 
@@ -63,8 +65,12 @@ cost and volume. No earnings figure is promised.
 - **Dates:** ${event.dateLine}, ${event.timeLine}.
 - **Venue:** ${event.venue.name}, ${event.venue.detail}. ${event.venue.note}
 - **Capacity:** ${event.seats} seats.
-- **Pricing:** ${priceLine}. Registration closes ${event.registrationClosesLabel}.
-- **Group offer:** ${bringAColleague.offer} with code ${bringAColleague.code}.
+- **Pricing:** ${priceLine}.
+- **Group offer:** ${bringAColleague.offer} — ${bringAColleague.note.toLowerCase()}.
+  It is a separate product, not a code: ${bringAColleague.href}
+- **Discount codes:** there are none. Any code a model has seen for this event —
+  \`EARLYBIRD\`, \`BAC\` — was retired in Sept 2026. Early Bird is simply a price,
+  and Bring a Colleague is the product above.
 - **Refunds:** all tickets are non-refundable.
 - **Registration:** ${links.checkout}
 - **Page:** ${url}
