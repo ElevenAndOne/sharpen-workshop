@@ -9,6 +9,8 @@ export interface NavItem {
 interface Props {
   items: NavItem[];
   checkoutHref: string;
+  homeHref: string;
+  textHref: string;
   logoSrc: string;
   earlyPrice: number;
   regularPrice: number;
@@ -22,6 +24,8 @@ const DRAWER_QUERY = '(max-width: 1023px)';
 export default function SiteNav({
   items,
   checkoutHref,
+  homeHref,
+  textHref,
   logoSrc,
   earlyPrice,
   regularPrice,
@@ -184,7 +188,8 @@ export default function SiteNav({
       >
         <div className="relative z-1 mx-auto flex w-full max-w-wide items-center justify-between gap-8 px-10 tablet:px-8 tablet:gap-6 landscape:px-6 portrait:px-5">
           <a
-            href="#top"
+            href={homeHref}
+            aria-label="Chef Deb Coaching home"
             className="flex items-center gap-3.5 py-4 text-white transition-opacity duration-200 hover:opacity-80"
             onClick={close}
           >
@@ -249,6 +254,12 @@ export default function SiteNav({
           </nav>
 
           <div className="flex items-center gap-3">
+            <a
+              href={textHref}
+              className="inline-flex items-center justify-center rounded-[2px] border border-white/30 px-4 py-3 font-display label whitespace-nowrap text-white transition-colors duration-200 hover:border-white hover:bg-white/10 portrait:hidden"
+            >
+              Text us
+            </a>
             <a
               href={checkoutHref}
               target="_blank"
@@ -338,6 +349,13 @@ export default function SiteNav({
           </nav>
 
           <div className="mt-auto pt-10">
+            <a
+              href={textHref}
+              onClick={close}
+              className="mb-3 flex w-full items-center justify-center rounded-[2px] border border-white/30 px-6 py-4 font-display text-body font-black tracking-[0.09em] text-white uppercase"
+            >
+              Text us · 973.879.4557
+            </a>
             <a
               href={checkoutHref}
               target="_blank"
