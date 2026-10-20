@@ -2,7 +2,6 @@ import type { ImageMetadata } from 'astro';
 
 /* Sponsor logos — the normalized plates, not the supplied originals. */
 import serenityKnives from '../assets/images/sponsors/serenity-knives-logo.png';
-import shubuCreative from '../assets/images/sponsors/shubu-tagline-midnight-logo.png';
 import supplyClub from '../assets/images/sponsors/supply-club-green-logo.png';
 import teva from '../assets/images/sponsors/teva-full-stacked-logo.png';
 
@@ -70,7 +69,6 @@ export const sponsorTiers: SponsorTier[] = [
     base: 68,
     sponsors: [
       { name: 'Serenity Knives', href: 'https://serenityknives.com/', logo: serenityKnives },
-      { name: 'ShuBu Creative', href: 'https://shubucreative.com/', logo: shubuCreative },
       { name: 'TEVA Bookkeeping Solutions', href: 'https://tevabookkeeping.com/', logo: teva },
     ],
   },
